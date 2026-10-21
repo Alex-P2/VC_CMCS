@@ -1,0 +1,189 @@
+﻿@*
+    References
+    https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+*@
+
+@{
+    ViewData["Title"] = "Process Claims";
+}
+
+@{
+    await Html.RenderPartialAsync("_LoginPartial");
+}
+
+@using Newtonsoft.Json;
+@model ProcessClaimsViewModel
+
+<div class="container justify-content-center">
+    <div class="d-flex flex-column position-relative px-3" style="top:160px;max-height: 680px; min-height: 600px; border: 1px solid var(--bg-accent); border-radius: 4px; box-shadow: var(--bg-accent); background-color: var(--bg-secondary);">
+        <div class="d-flex flex-row justify-content-between py-2" style="background-color: var(--bg-secondary);">
+            <h3 class="text-light">Process Claims</h3>
+            <form asp-action="Index" class="align-content-center">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="query" placeholder="" value="@Model.Query" />
+                    <button class="btn" style="background-color:var(--bg-accent)"><i class="bi bi-search"></i></button>
+                    @if (Model.Filtered)
+                    {
+                        <a asp-action="Index" class="btn ms-1" style="background-color:var(--bg-accent)"><i class="bi bi-x-square"></i></a>
+                    }
+                </div>
+            </form>
+        </div>
+        <div class="d-flex flex-row mt-2 overflow-auto pb-2 gap-3">
+            <div class="table-responsive w-100">
+                <table class="table table-bordered rounded-2">
+                    <thead class="sticky-top" style="background-color: var(--bg-secondary); color:white;">
+                        <tr>
+                            <th>Claimant</th>
+                            <th>Module Code</th>
+                            <th>Hours Worked</th>
+                            <th>Claim Value</th>
+                            <th>Status</th>
+                            <th>Date Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody style="background-color:white; color: black;">
+                        @if (Model.Claims != null && Model.Claims.Count > 0)
+                        {
+                            foreach (var claim in Model.Claims)
+                            {
+                                <tr id="claim-id-@claim.ClaimID" data-lecturer-id="@claim.LecturerID">
+                                    <td>@claim.LecturerName</td>
+                                    <td>@claim.ModuleCode</td>
+                                    <td>@claim.HoursWorked</td>
+                                    <td>@claim.ClaimAmount</td>
+                                    <td><span class="rounded-2 py-2 px-2 status-span approved-status">@claim.ClaimStatusTitle</span></td>
+                                    <td>@claim.DateCreated</td>
+                                    <td>
+                                        <div class="d-flex flex-nowrap gap-2">
+                                            <a onclick="selectClaim('@(claim.ClaimID)')" class="btn-theme btn-theme-primary details-btn align-content-center select-claim-btn" style="color:white;background-color:var(--bg-secondary)">Select</a>
+                                            <a onclick="submitClaims('@(claim.ClaimID)')" class="btn-theme btn-theme-primary details-btn align-content-center" style="color:white;background-color:var(--bg-secondary)">Process</a>
+                                            <button class="btn-theme btn-modal-reject table-action-btn py-2" data-bs-toggle="modal" data-bs-target="#confirmDelete" data-claim-id="@claim.ClaimID">Reject</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>No invoices available for processing.</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="confirmDelete">
+    <div class="modal-dialog rounded-3">
+        <div class="modal-content rounded-3" style="border: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+            <div class="modal-header rounded-3" style="border-bottom: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <h5 class="modal-title">Reject Claim: <span id="delete-claim-id"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="color:white;">
+                <p>Are you sure you want to reject this claim?</p>
+            </div>
+            <div class="modal-footer py-4 rounded-3" style="border-top: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <div class="d-flex w-100 gap-3 justify-content-center align-items-center">
+                    <a id="delete-confirm-btn" class="btn-theme btn-modal-reject py-2 text-center">Reject</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["ToastData"] is not null)
+{
+    <partial name="_ToastPartial" model="@(TempData["ToastData"])" />
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rejectBtns = document.querySelectorAll('.btn-modal-reject.table-action-btn');
+            rejectBtns.forEach((rejectBtn) => {
+                rejectBtn.addEventListener('click', () => {
+                    // get claimID
+                    const claimID = rejectBtn.getAttribute('data-claim-id');
+                    // set modal title
+                    const modalTitle = document.getElementById('delete-claim-id');
+                    modalTitle.innerText = claimID;
+                    // set confirm btn href
+                    const confirmBtn = document.getElementById('delete-confirm-btn');
+                    confirmBtn.setAttribute('href', `/HR/Invoice/RejectClaim?claimID=${claimID}`);
+                });
+            });
+        });
+
+        // track the ID of the lecturer of selected claims
+        var claimSelectionLecturerID = null;
+        var claimSelection = [];
+
+        function selectClaim(claimID)
+        {
+            const claimRow = document.getElementById(`claim-id-${claimID}`);
+            const rowLecturerID = claimRow.getAttribute('data-lecturer-id');
+            if (claimSelectionLecturerID == null) {
+                claimSelectionLecturerID = rowLecturerID;
+            } else if (claimSelectionLecturerID != rowLecturerID) {
+                alert('You can only select claims from the same lecturer to process together.');
+                return;
+            }
+            // set background to indicate selection
+            claimRow.setAttribute('style', 'background-color:#105a7e42;');
+            const selectClaimBtn = claimRow.getElementsByClassName('select-claim-btn')[0];
+            selectClaimBtn.innerText = 'Deselect';
+            selectClaimBtn.setAttribute('onclick', `deselectClaim('${claimID}')`);
+            claimSelection.push(claimID);
+        }
+
+        function deselectClaim(claimID)
+        {
+            const claimRow = document.getElementById(`claim-id-${claimID}`);
+            // remove background to indicate deselection
+            claimRow.removeAttribute('style');
+            const selectClaimBtn = claimRow.getElementsByClassName('select-claim-btn')[0];
+            selectClaimBtn.innerText = 'Select';
+            selectClaimBtn.setAttribute('onclick', `selectClaim('${claimID}')`);
+            
+            claimSelection = claimSelection.filter(id => id != claimID);
+
+            if (claimSelection.length == 0) {
+                claimSelectionLecturerID = null;
+            }
+        }
+
+        function submitClaims(claimID)
+        {
+            if (claimSelection.length == 0) {
+                claimSelection.push(claimID);
+            }
+
+            fetch('/HR/Invoice/GenerateInvoice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(claimSelection)
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (result.redirectUrl)
+                {
+                    window.location.href = result.redirectUrl;
+                }
+            });
+        }
+    </script>
+}

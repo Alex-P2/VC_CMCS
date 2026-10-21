@@ -1,0 +1,137 @@
+﻿@*
+    References
+    https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file
+    https://getbootstrap.com/docs/5.3/components/modal/
+    https://getbootstrap.com/docs/5.3/content/tables/
+    https://icons.getbootstrap.com/icons/check/
+    https://icons.getbootstrap.com/icons/x/
+    https://www.w3docs.com/snippets/css/how-to-customize-file-inputs.html
+*@
+
+@{
+    ViewData["Title"] = "New Claim";
+}
+
+@{
+    await Html.RenderPartialAsync("_LoginPartial");
+}
+
+@model CreateClaimViewModel;
+
+<div class="d-flex flex-column gap-1 position-relative justify-content-center align-items-center" style="width:100%;top:96px;">
+    <form class="form-theme mb-3" asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly"></div>
+        <input asp-for="LecturerID" type="hidden" />
+        <input asp-for="LecturerName" type="hidden" />
+        <input asp-for="HourlyRate" class="input-theme py-3 px-2" type="hidden" />
+
+        <div class="form-theme-header">
+            <h2>New Claim</h2>
+        </div>
+
+        <div class="form-theme-inner">
+            <label class="input-label">Claimant</label>
+            <h6 class="text-white">@Model.LecturerName</h6>
+
+            <label class="input-label" for="ModuleID">Module</label>
+            <select asp-for="CourseModuleID" class="input-theme">
+                @if (Model.CourseModuleID != 0)
+                {
+                    <option value="@Model.CourseModuleID" selected>@Model.Modules.First(m => m.CourseModuleId.Equals(Model.CourseModuleID)).ModuleCode</option>
+                }
+                else
+                {
+                    <option value="" disabled selected hidden></option>
+                }
+                @foreach (var module in Model.Modules)
+                {
+                    <option value="@module.CourseModuleId">@module.ModuleCode</option>
+                }
+            </select>
+            <span class="text-danger" asp-validation-for="CourseModuleID"></span>
+
+            <label class="input-label" for="HoursWorked">Hours Worked @("@") R@(Model.HourlyRate)/h</label>
+            <input asp-for="HoursWorked" id="hours-worked-input" class="input-theme py-3 px-2" type="number" placeholder="Hours Worked" />
+            <span class="text-danger" asp-validation-for="HoursWorked"></span>
+
+            <label class="input-label" for="HourlyRate">Claim Total (ZAR)</label>
+            <h6 id="claim-total-display" class="text-white">0</h6>
+            
+            <label class="input-label" for="AdditionalNotes">Comments</label>
+            <textarea asp-for="AdditionalNotes" cols="1" rows="3" class="input-theme py-3 px-2" placeholder="Additional Notes..."></textarea>
+            
+            <div>
+                <ul id="file-list" class="file-input-list">
+                    @if (Model.TempFiles.Count > 0)
+                    {
+                        foreach (var tempFile in Model.TempFiles)
+                        {
+                            <li class="temp-file-elements">@tempFile.FileName</li>
+                            <input class="temp-file-elements" type="hidden" asp-for="TempFiles[Model.TempFiles.IndexOf(tempFile)].FileName" value="@tempFile.FileName" />
+                            <input class="temp-file-elements" type="hidden" asp-for="TempFiles[Model.TempFiles.IndexOf(tempFile)].Path" value="@tempFile.Path" />
+                            <input class="temp-file-elements" type="hidden" asp-for="TempFiles[Model.TempFiles.IndexOf(tempFile)].ContentType" value="@tempFile.ContentType" />
+                        }
+                    }
+                </ul>
+                <label class="btn-theme btn-theme-primary py-2 file-input">
+                    <input id="file-input" asp-for="SupportingDocuments" type="file" accept=".pdf,.docx,.xlsx" multiple="multiple" />
+                    <span>Add Attachments</span>
+                </label>
+                <span class="text-danger" asp-validation-for="SupportingDocuments"></span>
+            </div>
+        </div>
+
+        <div class="form-theme-footer">
+            <input class="btn-theme btn-theme-accent py-3" type="submit" value="Submit" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('file-input');
+            fileInput.addEventListener('change', (event) => {
+                const files = event.target.files;
+
+                const fileList = document.getElementById('file-list');
+                const tempFileElements = document.querySelectorAll('.temp-file-elements');
+                var fileNames = [];
+                for (let i = 0; i < fileList.children.length; i++) {
+                    if (fileList.children[i].tagName === 'LI') {
+                        fileNames.push(fileList.children[i].innerText);
+                        fileInput.value = '';
+                    }
+                }
+
+                fileList.innerHTML = "";
+
+                for (let i = 0; i < tempFileElements.length; i++) {
+                    fileList.appendChild(tempFileElements[i]);
+                }
+
+                for (let i = 0; i < files.length; i++) {
+                    if (!fileNames.includes(files[i].name)) {
+                        const liElement = document.createElement('li');
+                        liElement.innerText = files[i].name;
+                        fileList.appendChild(liElement);
+                    }
+                }
+            });
+
+            // auto calculate claim amount using saved hourly rate
+            const hoursWorkedInput = document.getElementById('hours-worked-input');
+            hoursWorkedInput.addEventListener('input', () => {
+                var hoursWorked = parseFloat(hoursWorkedInput.value) || 0; // zero if invalid
+                var hourlyRate = @Model.HourlyRate;
+                var claimTotal = hoursWorked * hourlyRate;
+                // display value
+                document.getElementById('claim-total-display').innerText = 'R ' + claimTotal;
+            });
+        });
+    </script>
+}
+

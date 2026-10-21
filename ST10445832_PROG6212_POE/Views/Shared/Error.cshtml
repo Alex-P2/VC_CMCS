@@ -1,0 +1,15 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h2 class=" mt-5" style="color: var(--bg-accent)">Error: @Model.StatusCode</h2>
+@if (Model.StatusCode == 404)
+{
+    <h3 style="color: var(--bg-accent)">The resource you are looking for could not be found.</h3>
+    <a asp-controller="Account" asp-action="SignIn" asp-area="" class="btn-theme btn-theme-accent px-3 py-1">Return to Home Page</a>
+}
+else
+{
+    <h3 style="color: var(--bg-accent)">An error occurred while processing your request.</h3>
+}

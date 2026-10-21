@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Sign In";
+}
+
+@model SignInCredentials;
+
+<div class="d-flex flex-column justify-content-center align-items-center pt-5">
+    <h1 class="text-center">Contract Monthly<br />Claims System</h1>
+    <form class="form-theme mt-5" asp-action="SignIn">
+        <div class="form-theme-header">
+            <h2>Sign In</h2>
+        </div>
+
+        <div class="form-theme-inner">
+            <input asp-for="Email" class="input-theme py-3 px-2" type="email" placeholder="Email" />
+            <span style="color: var(--bg-accent)" asp-validation-for="Email"></span>
+
+            <input asp-for="Password" class="input-theme py-3 px-2" type="password" placeholder="Password" />
+            <span style="color: var(--bg-accent)" asp-validation-for="Password"></span>
+        </div>
+
+        <div class="form-theme-footer">
+            <input class="btn-theme btn-theme-accent py-3" type="submit" value="Sign In" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

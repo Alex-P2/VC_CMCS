@@ -1,0 +1,221 @@
+﻿@*
+    References
+    https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/optgroup
+*@
+
+@{
+    ViewData["Title"] = "Update User";
+}
+
+@{
+    await Html.RenderPartialAsync("_LoginPartial");
+}
+
+@model UpdateUserViewModel;
+
+<div class="d-flex flex-column gap-1 position-relative justify-content-center align-items-center" style="width:100%;top:96px;">
+    <form id="update-user-form" class="form-theme mb-4" asp-action="Update" method="post">
+        <input asp-for="UserId" type="hidden" />
+        <input asp-for="Role" type="hidden" />
+        <input asp-for="BankAccountId" type="hidden" />
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="form-theme-header">
+            <h2>Update User</h2>
+        </div>
+
+        <div class="form-theme-inner">
+            <label class="input-label" for="FirstName">First Name</label>
+            <input asp-for="FirstName" type="text" class="input-theme" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+            <label class="input-label" for="LastName">Last Name</label>
+            <input asp-for="LastName" type="text" class="input-theme" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+
+            <label class="input-label" for="Email">Email</label>
+            <input asp-for="Email" type="email" class="input-theme" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+            <label class="input-label" for="Password">Password</label>
+            <input asp-for="Password" type="password" class="input-theme" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+            <div id="lecturer-fields" class="flex-column" style="display:@(Model.Role.Equals("Lecturer") ? "flex" : "none");">
+                <label class="input-label" for="HourlyRate">Hourly Rate</label>
+                <input asp-for="HourlyRate" type="text" class="input-theme mb-2" />
+                <span asp-validation-for="HourlyRate" class="text-danger"></span>
+
+                <label class="input-label" for="AccountHolder">Account Holder</label>
+                <input asp-for="AccountHolder" type="text" class="input-theme mb-2" />
+                <span asp-validation-for="AccountHolder" class="text-danger"></span>
+
+                <label class="input-label" for="BankName">Bank Name</label>
+                <input asp-for="BankName" type="text" class="input-theme mb-2" />
+                <span asp-validation-for="BankName" class="text-danger"></span>
+
+                <label class="input-label" for="BranchCode">Branch Code</label>
+                <input asp-for="BranchCode" type="text" class="input-theme mb-2" />
+                <span asp-validation-for="BranchCode" class="text-danger"></span>
+
+                <label class="input-label" for="AccountNumber">Account Number</label>
+                <input asp-for="AccountNumber" type="text" class="input-theme mb-2" />
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+
+                <label class="input-label" for="module-select">Lecturer Modules</label>
+                <div class="input-group mb-2">
+                    <select id="module-select" class="form-control input-theme">
+                        <option value="" disabled selected hidden></option>
+                        @foreach (var course in Model.CourseModules.Select(cm => cm.CourseCode).Distinct())
+                        {
+                            <optgroup label="@course">
+                                @foreach (var courseModule in Model.CourseModules.Where(cm => cm.CourseCode.Equals(course)))
+                                {
+                                    <option value="@courseModule.CourseModuleId">@courseModule.ModuleCode</option>
+                                }
+                            </optgroup>
+                        }
+                    </select>
+                    <button onclick="addModule()" type="button" class="btn-theme-accent">Select</button>
+                </div>
+                <span asp-validation-for="LecturerCourseModulesJson" class="text-danger"></span>
+                <div id="added-modules">
+                    @foreach (var courseModule in Model.LecturerModules)
+                    {
+                        <div class="d-flex justify-content-between w-100 text-white">
+                            <span data-course-module-id="@courseModule.Item1">@courseModule.Item2</span><a onclick="removeModule('@(courseModule.Item1)')" class="text-decoration-underline text-white" style="cursor:pointer;">remove</a>
+                        </div>
+                    }
+                </div>
+                <input id="modules-json" asp-for="LecturerCourseModulesJson" type="hidden" />
+            </div>
+
+            <div id="approver-fields" class="flex-column" style="display:@((Model.Role.Equals("Academic Manager") || Model.Role.Equals("Programme Coordinator")) ? "flex" : "none");">
+                <label class="input-label" for="course-select">Courses</label>
+                <div class="input-group mb-2">
+                    <select id="course-select" class="input-theme form-control">
+                        <option value="" disabled selected hidden></option>
+                        @foreach (var course in Model.Courses)
+                        {
+                            <option value="@course.Item1">@course.Item2</option>
+                        }
+                    </select>
+                    <button onclick="addCourse()" type="button" class="btn-theme-accent">Select</button>
+                </div>
+                <span asp-validation-for="CoursesJson" class="text-danger"></span>
+                <div id="added-courses">
+                    @foreach (var course in Model.ApproverCourses)
+                    {
+                        <div class="d-flex justify-content-between w-100 text-white">
+                            <span data-course-id="@course.Item1">@course.Item2</span><a onclick="removeCourse('@(course.Item1)')" class="text-decoration-underline text-white" style="cursor:pointer;">remove</a>
+                        </div>
+                    }
+                </div>
+                <input id="courses-json" asp-for="CoursesJson" type="hidden" />
+            </div>
+        </div>
+
+        <div class="form-theme-footer">
+            <button class="btn-theme btn-theme-accent py-3" type="button" onclick="submitForm()">Submit</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+@{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // add a module to the list of selected modules
+        function addModule() {
+            const moduleListDiv = document.getElementById('added-modules');
+            const moduleToAddId = document.getElementById('module-select').value; // courseModuleId
+            const moduleToAddCode = document.getElementById('module-select').selectedOptions[0].innerText; // module code
+            var addModule = true;
+            for (let i = 0; i < moduleListDiv.children.length; i++) {
+                if (moduleListDiv.children[i].children[0].getAttribute('data-course-module-id') == moduleToAddId) {
+                addModule = false;
+                break;
+            }
+        }
+
+            if (addModule && moduleToAddCode !='') {
+                var newChild = document.createElement('div');
+                newChild.className = 'd-flex justify-content-between w-100 text-white';
+                newChild.innerHTML = `<span data-course-module-id="${moduleToAddId}">` + moduleToAddCode + '</span>' + `<a onclick="removeModule('${moduleToAddId}')" class="text-decoration-underline text-white" style="cursor:pointer;">remove</a>`;
+                moduleListDiv.appendChild(newChild);
+            }
+        }
+
+        // add a course to the list of selected courses
+        function addCourse() {
+            const courseListDiv = document.getElementById('added-courses');
+            const courseToAddId = document.getElementById('course-select').value; // courseId
+            const courseToAddCode = document.getElementById('course-select').selectedOptions[0].innerText; // course code
+            var addCourse = true;
+            for (let i = 0; i < courseListDiv.children.length; i++) {
+                if (courseListDiv.children[i].children[0].getAttribute('data-course-id') == courseToAddId) {
+                addCourse = false;
+                break;
+            }
+        }
+
+            if (addCourse && courseToAddCode !='') {
+                var newChild = document.createElement('div');
+                newChild.className = 'd-flex justify-content-between w-100 text-white';
+                newChild.innerHTML = `<span data-course-id="${courseToAddId}">` + courseToAddCode + '</span>' + `<a onclick="removeCourse('${courseToAddId}')" class="text-decoration-underline text-white" style="cursor:pointer;">remove</a>`;
+                courseListDiv.appendChild(newChild);
+            }
+        }
+
+        // remove a module from the list of selected modules
+        function removeModule(courseModuleId) {
+            const moduleListDiv = document.getElementById('added-modules');
+            for (let i = 0; i < moduleListDiv.children.length; i++) {
+                if (moduleListDiv.children[i].children[0].getAttribute('data-course-module-id') == courseModuleId)  {
+                    moduleListDiv.removeChild(moduleListDiv.children[i]);
+                    break;
+                }
+            }
+        }
+
+        // remove a course from the list of selected courses
+        function removeCourse(courseId) {
+           const courseListDiv = document.getElementById('added-courses');
+            for (let i = 0; i < courseListDiv.children.length; i++) {
+                if (courseListDiv.children[i].children[0].getAttribute('data-course-id') == courseId) {
+                     courseListDiv.removeChild(courseListDiv.children[i]);
+                    break;
+                }
+            }
+        }
+
+        // set module and course values if relevant before submission
+        function submitForm() {
+            // set modules value on hidden modules input
+            const modulesInput = document.getElementById('modules-json');
+            const modulesList = document.getElementById('added-modules');
+            var modules = [];
+
+            for (let i = 0; i < modulesList.children.length; i++) {
+                modules.push(modulesList.children[i].children[0].getAttribute('data-course-module-id'));
+            }
+
+            modulesInput.value = JSON.stringify(modules);
+
+            // set courses value on hidden courses input
+            const coursesInput = document.getElementById('courses-json');
+            const coursesList = document.getElementById('added-courses');
+            var courses = [];
+
+            for (let i = 0; i < coursesList.children.length; i++) {
+                courses.push(coursesList.children[i].children[0].getAttribute('data-course-id'));
+            }
+
+            coursesInput.value = JSON.stringify(courses);
+
+            const form = document.getElementById('update-user-form');
+            form.submit();
+        }
+    </script>
+}

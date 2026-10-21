@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="d-flex flex-column">
+    <h2 class="text-center mt-5">Access Denied: you aren't authorised to view this page.</h2>
+    <form asp-controller="Account" asp-action="SignOut" method="post" class="d-flex justify-content-center gap-3 mt-2">
+        <a asp-controller="Account" asp-action="SignIn" asp-area="" class="text-center btn-theme btn-theme-accent px-3 py-1" style="max-width:200px">Home</a>
+        <button type="submit" class="btn-theme btn-theme-accent px-3 py-1" style="max-width:200px">Sign Out</button>
+    </form>
+</div>
+
+

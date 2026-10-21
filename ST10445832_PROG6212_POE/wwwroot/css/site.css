@@ -1,0 +1,267 @@
+:root {
+    --bg-primary: #093445;
+    --bg-secondary: #105A7E;
+    --bg-accent: #90C440;
+    --drop-shadow-primary: 0px 2px 0px var(--bg-primary);
+    --drop-shadow-secondary: 0px 2px 0px var(--bg-secondary);
+    --drop-shadow-accent: 0px 2px 0px var(--bg-accent);
+}
+
+/* CMCS Prototype Styles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--bg-accent);
+}
+
+a, p {
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 64px;
+    font-weight: bold;
+    text-shadow: var(--drop-shadow-secondary);
+}
+
+h2 {
+    font-size: 42px;
+    text-shadow: var(--drop-shadow-primary);
+}
+
+.btn-theme {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+    border: 1px solid var(--bg-primary);
+    border-radius: 4px;
+    transition: all 20ms;
+}
+
+    .btn-theme:hover, .btn-theme:active {
+        transform: translateY(2px);
+        box-shadow: none;
+    }
+
+.btn-theme-primary {
+    color: var(--bg-accent);
+    background-color: var(--bg-primary);
+    box-shadow: var(--drop-shadow-accent);
+}
+
+.btn-theme-secondary {
+    color: white;
+    background-color: var(--bg-secondary);
+    box-shadow: 0px 4px 0px var(--bg-accent);
+}
+
+    .btn-theme-secondary:hover {
+        border: 1px solid #06212c;
+        transform: translateY(4px);
+    }
+
+.btn-theme-accent {
+    color: var(--bg-primary);
+    background-color: var(--bg-accent);
+    box-shadow: var(--drop-shadow-primary);
+}
+
+.btn-table {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    box-shadow: 0px 2px 0px grey;
+}
+
+    .btn-table:hover {
+        transform: translateY(2px);
+        box-shadow: none;
+    }
+
+.btn-approve {
+    background-color: var(--bg-accent);
+}
+
+.btn-reject {
+    background-color: indianred;
+}
+
+.btn-disabled {
+    background-color: grey;
+    transition: none;
+    box-shadow: none;
+}
+
+    .btn-disabled:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+.input-theme {
+    border: 2px solid var(--bg-primary);
+    border-radius: 4px;
+    padding: 1rem 0.5rem;
+}
+
+/* file input */
+.file-input {
+    cursor: pointer;
+    text-align: center;
+}
+
+input[type=file] {
+    display:none;
+}
+
+.file-input-list {
+    list-style: square;
+    color: var(--bg-accent);
+}
+
+/*------------*/
+
+.form-theme {
+    display: flex;
+    flex-direction: column;
+    max-width: 680px;
+    width: 680px;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--bg-accent);
+    border-radius: 4px;
+    box-shadow: var(--drop-shadow-accent);
+}
+
+.form-theme-header {
+    text-align: center;
+    justify-content: center;
+    padding: 1rem 10rem;
+    display: flex;
+}
+
+.form-theme-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 2rem 10rem;
+    border-top: 1px solid var(--bg-accent);
+    border-bottom: 1px solid var(--bg-accent);
+}
+
+.form-theme-footer {
+    padding: 2rem 10rem;
+    display: flex;
+    justify-content: center;
+}
+
+.form-theme .input-label {
+    color: var(--bg-accent);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+.claim-filter-option {
+    color: white;
+    padding: 0.4rem 2rem;
+    background-color: var(--bg-secondary);
+}
+
+    .claim-filter-option:hover {
+        color: white;
+        background-color: var(--bg-primary);
+    }
+
+.active-filter {
+    background-color: var(--bg-primary);
+}
+
+.btn-modal-reject {
+    color: white;
+    border: none;
+    background-color: indianred;
+    box-shadow: 0px 2px 0px darkred;
+}
+
+tr {
+    vertical-align: middle;
+}
+
+th, td {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.modal-body p {
+    font-weight: bold;
+}
+
+.modal-body p a {
+    color: var(--bg-accent);
+    text-decoration: underline;
+}
+
+    .modal-body p a:hover {
+        color: #0f7400;
+        text-decoration: underline;
+    }
+
+.modal-body span {
+    font-weight: normal;
+}
+
+#delete-confirm-btn:hover {
+    color: white;
+}
+
+.approved-status {
+    text-decoration:none;
+    background-color:var(--bg-accent);
+    color:var(--bg-primary);
+}
+
+.verified-status {
+    text-decoration: none;
+    background-color: dodgerblue;
+    color: white;
+}
+
+.pending-status {
+    text-decoration: none;
+    background-color: orange;
+    color: var(--bg-primary);
+}
+
+.rejected-status {
+    text-decoration: none;
+    background-color: black;
+    color: white;
+}
+
+.processed-status {
+    text-decoration: none;
+    background-color: #0b9600;
+    color: white;
+}
+/* ------------------------ */
+
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--bg-primary);
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    background-color: var(--bg-primary);
+    margin: 0px;
+}

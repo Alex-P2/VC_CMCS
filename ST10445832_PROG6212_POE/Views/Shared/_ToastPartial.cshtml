@@ -1,0 +1,28 @@
+﻿@* 
+    References
+    https://getbootstrap.com/docs/5.3/components/toasts/
+*@
+
+@model string
+@using Newtonsoft.Json;
+@{
+    ToastPartialData data = JsonConvert.DeserializeObject<ToastPartialData>(Model);
+}
+
+<div class="toast @(data.ToastType ? "bg-success" : "bg-danger") position-fixed start-50 translate-middle-x" style="z-index: 999;bottom: 32px;" data-bs-autohide="true" role="alert" id="feedback-toast">
+    <div class="d-flex">
+        <div class="toast-body" style="color:white;">
+            @data.ToastMessage
+        </div>
+        <button type="button" class="btn-close btn-close-white bg-light me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        var toastElement = document.getElementById('feedback-toast');
+        var feedbackToast = new bootstrap.Toast(toastElement, { delay: 4000 });
+        // display the toast
+        feedbackToast.show();
+    });
+</script>

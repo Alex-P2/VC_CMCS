@@ -1,0 +1,27 @@
+﻿@*
+    References
+    https://icons.getbootstrap.com/icons/person-circle/
+*@
+
+<div class="w-100 position-absolute start-0 d-flex justify-content-center" style="background-color:var(--bg-secondary);">
+    <div class="d-flex w-75 justify-content-between p-3">
+        <div class="d-flex align-items-center">
+            @if (ViewContext.RouteData.Values.Values.Any(val => val.Equals("History") || val.Equals("MyAccount") || val.Equals("NewClaim")))
+            {
+                <a asp-action="Index" style="font-size: 28px;color:var(--bg-accent); text-decoration:none;"><i class="bi bi-arrow-left"></i> Back</a>
+            }
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn-theme btn-theme-accent px-3 py-1">Sign Out</button>
+            @if (ViewContext.RouteData.Values.Values.Any(val => val.Equals("History") || val.Equals("MyAccount") || val.Equals("NewClaim") || val.Equals("Lecturer")))
+            {
+                <a asp-action="MyAccount" style="font-size: 36px;color:var(--bg-accent);"><i class="bi bi-person-circle"></i></a>
+            }
+            else
+            {
+                <a href="" style="font-size: 36px;color:var(--bg-accent);"><i class="bi bi-person-circle"></i></a>
+            }
+        </div>
+    </div>
+</div>
+

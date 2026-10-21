@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Invoice";
+}
+
+@{
+    await Html.RenderPartialAsync("_LoginPartial");
+}
+
+<div class="d-flex position-relative justify-content-center" style="width:100%;top:160px;">
+    <div class="d-flex justify-content-center gap-5" style="width:600px;">
+        <a asp-controller="Invoice" asp-action="ProcessClaims" class="btn-theme btn-theme-secondary">
+            <div class="d-flex flex-column justify-content-center pb-3">
+                <i class="bi bi-gear" style="color:white;text-align:center;vertical-align:bottom;font-size:128px;"></i>
+                <span style="color:white;text-align:center;font-size:24px;">Process Claims</span>
+            </div>
+        </a>
+        <a asp-controller="Invoice" asp-action="Invoices" class="btn-theme btn-theme-secondary">
+            <div class="d-flex flex-column justify-content-center pb-3">
+                <span style="color:white;text-align:center;font-size:128px;">
+                    <i class="bi bi-receipt"></i>
+                </span>
+                <span style="color:white;text-align:center;font-size:24px;">Invoices</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+@if (TempData["ToastData"] is not null)
+{
+    <partial name="_ToastPartial" model="@(TempData["ToastData"])" />
+}

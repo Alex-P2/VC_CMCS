@@ -1,0 +1,388 @@
+﻿@*
+    References
+    https://getbootstrap.com/docs/5.3/components/modal/
+    https://getbootstrap.com/docs/5.3/content/tables/
+    https://icons.getbootstrap.com/icons/check/
+    https://icons.getbootstrap.com/icons/x/
+*@
+
+@{
+    ViewData["Title"] = "Approve Claims";
+}
+
+@model ApproveClaimsViewModel;
+
+@{
+    await Html.RenderPartialAsync("_LoginPartial");
+}
+
+<div class="container justify-content-center">
+    <div class="d-flex flex-column position-relative p-2" style="max-height: 600px;min-height:600px;top:140px;border: 1px solid var(--bg-accent);border-radius:4px;box-shadow:var(--bg-accent);background-color:var(--bg-secondary);">
+        <div class="d-flex justify-content-between" style="background-color: var(--bg-secondary);border-radius:4px;">
+            <h3 class="text-light">Claim Approval</h3>
+            <form asp-action="Index" class="align-content-center">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="query" placeholder="" value="@Model.Query" />
+                    <button class="btn" style="background-color:var(--bg-accent)"><i class="bi bi-search"></i></button>
+                    @if (Model.Filtered)
+                    {
+                        <a asp-action="Index" class="btn ms-1" style="background-color:var(--bg-accent)"><i class="bi bi-x-square"></i></a>
+                    }
+                </div>
+            </form>
+        </div>
+
+        <div class="d-flex flex-row mt-2 overflow-auto pb-1">
+            <div style="width:240px;">
+                <div class="d-flex flex-column">
+                    <a href="/Approver/ApproveClaims?query=" class="claim-filter-option py-2 px-3 shadow-sm @(Model.Filter.Equals(string.Empty) ? "active-filter" : "")">All Claims</a>
+                    <a href="/Approver/ApproveClaims?query=Verified" class="claim-filter-option py-2 px-3 shadow-sm @(Model.Filter.Equals("Verified") ? "active-filter" : "")">Verified Claims</a>
+                    <a href="/Approver/ApproveClaims?query=Approved" class="claim-filter-option py-2 px-3 shadow-sm @(Model.Filter.Equals("Approved") ? "active-filter" : "")">Approved Claims</a>
+                </div>
+            </div>
+
+            <div class="table-responsive w-100">
+                <table class="table">
+                    <thead class="sticky-top" style="background-color: var(--bg-secondary); color:white;">
+                        <tr>
+                            <th>Claimant</th>
+                            <th>Module</th>
+                            <th>Hours Worked</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody style="background-color:white; color: black;">
+                        @if (Model.Claims.Count > 0)
+                        {
+                            @foreach (var claim in Model.Claims)
+                            {
+                                <tr data-claim-id="@claim.ClaimID">
+                                    <td>@claim.ClaimantName</td>
+                                    <td>@claim.ModuleCode</td>
+                                    <td>@claim.HoursWorked</td>
+                                    <td>R@(claim.HoursWorked* claim.HourlyRate)</td>
+                                    @if (claim.Status.Equals("Approved"))
+                                    {
+                                        <td><span class="rounded-2 py-2 px-2 status-span approved-status">@claim.Status</span></td>
+                                    }
+                                    else if (claim.Status.Equals("Verified"))
+                                    {
+                                        <td><span class="rounded-2 py-2 px-2 status-span verified-status">@claim.Status</span></td>
+                                    }
+                                    else if (claim.Status.Equals("Pending"))
+                                    {
+                                        <td><span class="rounded-2 py-2 px-2 status-span pending-status">@claim.Status</span></td>
+                                    }
+                                    else if (claim.Status.Equals("Rejected"))
+                                    {
+                                        <td><span class="rounded-2 py-2 px-2 status-span rejected-status">@claim.Status</span></td>
+                                    }
+                                    <td>
+                                        <div class="d-flex flex-nowrap gap-3">
+                                            <button class="btn-theme btn-theme-primary details-btn" style="color:white;background-color:var(--bg-secondary)" data-bs-toggle="modal" data-bs-target="#detailsModal" data-claim-id="@claim.ClaimID">Details</button>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn-theme btn-table @(claim.Status.Equals("Approved") ? "btn-disabled" : "btn-approve")" @(claim.Status.Equals("Approved") ? "disabled" : "") data-bs-toggle="modal" data-bs-target="#confirmApprove" data-claim-id="@claim.ClaimID"><i class="bi bi-check"></i></button>
+                                                <button class="btn-theme btn-table @(claim.Status.Equals("Rejected") ? "btn-disabled" : "btn-reject")" @(claim.Status.Equals("Rejected") ? "disabled" : "") data-bs-toggle="modal" data-bs-target="#confirmReject" data-claim-id="@claim.ClaimID"><i class="bi bi-x"></i></button>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>No claims found.</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="detailsModal">
+    <div class="modal-dialog rounded-3">
+        <div class="modal-content rounded-3" style="border: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+            <div class="modal-header rounded-3" style="border-bottom: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <h5 class="modal-title">Claim Details: #<span id="detail-claim-id"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="color:white;">
+                <p>
+                    Claimant
+                    <br />
+                    <span id="detail-claimant"></span>
+                </p>
+                <p>
+                    Module
+                    <br />
+                    <span id="detail-module"></span>
+                </p>
+                <p>
+                    Scheduled Sessions
+                    <br />
+                    <span id="detail-sessions"></span>
+                </p>
+                <p>
+                    Hours Worked
+                    <br />
+                    <span id="detail-hours"></span>
+                </p>
+                <p>
+                    Hourly Rate
+                    <br />
+                    <span id="detail-rate"></span>
+                </p>
+                <p>
+                    Amount (ZAR)
+                    <br />
+                    <span id="detail-amount"></span>
+                </p>
+                <p>
+                    Date Created
+                    <br />
+                    <span id="detail-date-created"></span>
+                </p>
+                <p>
+                    Status
+                    <br />
+                    <span id="detail-status"></span>
+                </p>
+                <p>
+                    Verifier
+                    <br />
+                    <span id="detail-verifier"></span>
+                </p>
+                <p>
+                    Lecturer Notes
+                    <br />
+                    <span id="detail-notes"></span>
+                </p>
+                <p>
+                    Suporting Documents
+                    <br />
+                    <span id="detail-attachments"></span>
+                </p>
+            </div>
+            <div class="modal-footer py-4 rounded-3" style="border-top: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <div class="d-flex w-100 gap-3 justify-content-center align-items-center">
+                    <button type="button" class="btn-theme btn-theme-primary py-2" data-bs-toggle="modal" data-bs-target="#detailsModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="confirmApprove">
+    <div class="modal-dialog rounded-3">
+        <div class="modal-content rounded-3" style="border: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+            <div class="modal-header rounded-3" style="border-bottom: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <h5 class="modal-title">Approve Claim: <span id="approve-claim-id-span"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="color:white;">
+                <p>Are you sure you want to approve this claim?</p>
+            </div>
+            <div class="modal-footer py-4 rounded-3" style="border-top: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <div class="d-flex w-100 gap-3 justify-content-center align-items-center">
+                    <a id="approve-confirm-btn" class="btn-theme btn-theme-accent py-2 text-center">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="confirmReject">
+    <div class="modal-dialog rounded-3">
+        <div class="modal-content rounded-3" style="border: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+            <div class="modal-header rounded-3" style="border-bottom: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <h5 class="modal-title">Reject Claim: <span id="reject-claim-id-span"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="color:white;">
+                <p>Are you sure you want to reject this claim?</p>
+            </div>
+            <div class="modal-footer py-4 rounded-3" style="border-top: 1px solid var(--bg-accent);background-color:var(--bg-secondary);">
+                <div class="d-flex w-100 gap-3 justify-content-center align-items-center">
+                    <a id="reject-confirm-btn" class="btn-theme btn-modal-reject py-2 text-center">Reject</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["ToastData"] is not null)
+{
+    <partial name="_ToastPartial" model="@(TempData["ToastData"])" />
+}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        const detailModal = document.getElementById('detailModal')
+        const approve = document.getElementById('confirmApprove')
+        const reject = document.getElementById('confirmReject')
+
+        var detailBtns = document.querySelectorAll('details-btn');
+        for (var i = 0; i < detailBtns.length; i++)
+        {
+            detailModal.addEventListener('shown.bs.modal', () => {
+                detailsBtns[i].focus()
+            })
+        }
+    });
+
+</script>
+
+<script type="text/javascript">
+    $('.details-btn').click((event) => {
+        const targetClaimID = event.target.getAttribute('data-claim-id');
+        const claimSpan = document.querySelector('#detail-claim-id');
+        const claimantSpan = document.querySelector('#detail-claimant');
+        const moduleSpan = document.querySelector('#detail-module');
+        const hoursWorkedSpan = document.querySelector('#detail-hours');
+        const hourlyRateSpan = document.querySelector('#detail-rate');
+        const amountSpan = document.querySelector('#detail-amount');
+        const dateSpan = document.querySelector('#detail-date-created');
+        const statusSpan = document.querySelector('#detail-status');
+        const notesSpan = document.querySelector('#detail-notes');
+        const sessionsSpan = document.querySelector('#detail-sessions');
+        const documentsSpan = document.querySelector('#detail-attachments');
+        const verifierSpan = document.querySelector('#detail-verifier');
+
+        $.ajax({
+            type: "POST",
+            url: "/Approver/ApproveClaims/GetClaimDetail",
+            data: { claimID: targetClaimID },
+            success: function (response){
+                claimSpan.innerHTML = response['claimID'];
+                claimantSpan.innerHTML = response["claimantName"];
+                verifierSpan.innerHTML = response["verifierName"];
+                moduleSpan.innerHTML = response['moduleCode'];
+                hoursWorkedSpan.innerHTML = response['hoursWorked'];
+                hourlyRateSpan.innerHTML = response['hourlyRate'];
+                amountSpan.innerHTML = Number(response['hoursWorked']) * Number(response['hourlyRate']);
+                dateSpan.innerHTML = new Date(response['dateCreated']).toDateString();
+                statusSpan.innerHTML = response['status'];
+                notesSpan.innerHTML = response['additionalNotes'];
+                sessionsSpan.innerHTML = response['scheduledSessions'];
+                var supportingDocuments = response['documents'];
+                documentsSpan.innerHTML = "";
+                if (supportingDocuments.length > 0) {
+                    for (let i = 0; i < supportingDocuments.length; i++) {
+                        var docAnchor = document.createElement('a');
+                        docAnchor.target = '_blank';
+                        const url = `/Approver/ApproveClaims/DownloadDocument?documentID=${supportingDocuments[i]['documentID']}`;
+                        docAnchor.href = url;
+                        docAnchor.innerText = supportingDocuments[i]['title'];
+                        var lineBreak = document.createElement('br');
+                        documentsSpan.appendChild(docAnchor);
+                        documentsSpan.appendChild(lineBreak);
+                    }
+                } else {
+                    documentsSpan.innerHTML = 'No supporting documents';
+                }
+
+            },
+            failure: function (response){
+                console.log(response.content);
+            },
+            error: function (response){
+                console.log(response.content);
+            }
+        });
+    });
+
+    $('.btn-approve').click((event) => {
+        var targetClaimID;
+        if (event.target.tagName === 'I')
+        {
+            targetClaimID = event.delegateTarget.getAttribute('data-claim-id');
+        }
+        else
+        {
+            targetClaimID = event.target.getAttribute('data-claim-id');
+        }
+        const claimIdSpan = document.querySelector('#approve-claim-id-span');
+        claimIdSpan.innerText = targetClaimID;
+
+        const approveBtn = document.querySelector('#approve-confirm-btn');
+        approveBtn.href = `/Approver/ApproveClaims/ApproveClaim?claimID=${targetClaimID}`;
+    });
+
+    $('.btn-reject').click((event) => {
+        var targetClaimID;
+        if (event.target.tagName === 'I')
+        {
+            targetClaimID = event.delegateTarget.getAttribute('data-claim-id');
+        }
+        else
+        {
+            targetClaimID = event.target.getAttribute('data-claim-id');
+        }
+        const claimIdSpan = document.querySelector('#reject-claim-id-span');
+        claimIdSpan.innerText = targetClaimID;
+        const rejectBtn = document.querySelector('#reject-confirm-btn');
+        rejectBtn.href = `/Approver/ApproveClaims/RejectClaim?claimID=${targetClaimID}`;
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+<script>
+    const conn = new signalR.HubConnectionBuilder()
+        .withUrl('/StatusHub')
+        .withAutomaticReconnect()
+        .build();
+
+    conn.on('ClaimStatusUpdated', (claimID, statusTitle) => {
+        const claimRow = document.querySelector(`[data-claim-id="${claimID}"]`);
+        if (claimRow)
+        {
+            const statusSpan = claimRow.querySelector('.status-span');
+            if (statusSpan)
+            {
+                statusSpan.innerText = statusTitle;
+
+                if (statusTitle === "Approved")
+                {
+                    statusSpan.classList.remove('verified-status');
+                    statusSpan.classList.remove('rejected-status');
+                    statusSpan.classList.add('approved-status');
+                }
+                else if (statusTitle === "Verified")
+                {
+                    statusSpan.classList.remove('pending-status');
+                    statusSpan.classList.remove('approved-status');
+                    statusSpan.classList.remove('rejected-status');
+                    statusSpan.classList.add('verified-status');
+                }
+                else if (statusTitle === "Pending")
+                {
+                    statusSpan.classList.remove('verified-status');
+                    statusSpan.classList.remove('rejected-status');
+                    statusSpan.classList.add('pending-status');
+                }
+                else if (statusTitle === "Rejected")
+                {
+                    statusSpan.classList.remove('verified-status');
+                    statusSpan.classList.remove('pending-status');
+                    statusSpan.classList.remove('approved-status');
+                    statusSpan.classList.add('rejected-status');
+                }
+            }
+        }
+    });
+
+    conn.start()
+    .catch(error => console.log(error));
+</script>

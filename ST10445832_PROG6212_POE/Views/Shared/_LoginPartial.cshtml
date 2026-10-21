@@ -1,0 +1,43 @@
+﻿@*
+    References
+    https://icons.getbootstrap.com/icons/person-circle/
+*@
+
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<ApplicationUser> SignInManager;
+
+<div class="w-100 position-absolute start-0 d-flex justify-content-center" style="background-color:var(--bg-secondary);">
+    <div class="d-flex w-75 justify-content-between p-3">
+        <div class="d-flex align-items-center">
+            @if (ViewContext.RouteData.Values["controller"].Equals("ApproveClaims") || ViewContext.RouteData.Values["controller"].Equals("VerifyClaims"))
+            {
+                @* Approvers only have a single accessible view *@
+            }
+            else if (!ViewContext.RouteData.Values["controller"].Equals("Home") && !ViewContext.RouteData.Values["action"].Equals("Index"))
+            {
+                <a asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="@ViewContext.RouteData.Values["controller"]" asp-action="Index" style="font-size: 28px;color:var(--bg-accent); text-decoration:none;"><i class="bi bi-arrow-left"></i> Back</a>
+            }
+            else if (!ViewContext.RouteData.Values["controller"].Equals("Home") && ViewContext.RouteData.Values["action"].Equals("Index"))
+            {
+                <a asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="Home" asp-action="Index" style="font-size: 28px;color:var(--bg-accent); text-decoration:none;"><i class="bi bi-arrow-left"></i> Back</a>
+            }
+            else if (ViewContext.RouteData.Values["controller"].Equals("Home") && !ViewContext.RouteData.Values["action"].Equals("Index"))
+            {
+                <a asp-area="@ViewContext.RouteData.Values["area"]" asp-controller="Home" asp-action="Index" style="font-size: 28px;color:var(--bg-accent); text-decoration:none;"><i class="bi bi-arrow-left"></i> Back</a>
+            }
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <form asp-area="default" asp-controller="Account" asp-action="SignOut" method="post" class="d-inline">
+                    <button type="submit" class="btn-theme btn-theme-accent px-3 py-1">Sign Out</button>
+                </form>
+            }
+            else
+            {
+                <a asp-action="SignIn" class="btn-theme btn-theme-accent px-3 py-1">Sign In</a>
+            }
+        </div>
+    </div>
+</div>
+
