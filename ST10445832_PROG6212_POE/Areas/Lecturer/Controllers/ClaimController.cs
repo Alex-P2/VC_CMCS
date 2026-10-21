@@ -1,4 +1,5 @@
-﻿// References
+﻿
+// References
 // https://www.csharp411.com/read-file-into-byte-array/
 // https://improveandrepeat.com/2019/10/working-with-temporary-files-in-net/
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/options?view=aspnetcore-9.0
@@ -14,7 +15,6 @@ using ST10445832_PROG6212_POE.Areas.Lecturer.Models;
 using ST10445832_PROG6212_POE.Data;
 using ST10445832_PROG6212_POE.Models;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
 {
@@ -22,13 +22,28 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
     [Authorize(Roles = "Lecturer")]
     public class ClaimController : Controller
     {
+        /// <summary>
+        /// Lecturer data access methods 
+        /// </summary>
         private readonly ILecturerRepository _repository;
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ClaimController(ILecturerRepository repository)
         {
             _repository = repository;
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Displays lecturer home with table of user's existing claims (filtered)
+        /// </summary>
+        /// <param name="query">Optional search query for filter</param>
+        /// <returns></returns>
         public async Task<IActionResult> Index(string query)
         {
             List<ClaimHistoryRecord> claimHistoryRecords = await _repository.GetLecturerClaimsAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -68,8 +83,12 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //=============================================================================//
-        // performs validation on claim inputs and creates a new claim in the database
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Performs validation on claim inputs and creates a new claim in the database
+        /// </summary>
+        /// <param name="model">View model</param>
         [HttpPost]
         [RequestSizeLimit(500_000_000)] // (Microsoft Docs)
         [RequestFormLimits(MultipartBodyLengthLimit = 500_000_000)]
@@ -136,7 +155,8 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
                             using (var stream = new FileStream(tempPath, FileMode.Create))
                             {
                                 file.CopyTo(stream);
-                            };
+                            }
+                            ;
 
                             model.TempFiles.Add(new TempFile { FileName = file.FileName, Path = tempPath, ContentType = file.ContentType });
                         }
@@ -203,8 +223,12 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
             }
         }
 
-        //===================================================================//
-        // Returns a json object containing the full detail of a claim
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Returns a json object containing the full detail of a claim
+        /// </summary>
+        /// <param name="claimID">ID of claim detail to fetch</param>
         [HttpPost]
         public async Task<JsonResult> GetClaimDetail(int claimID)
         {
@@ -213,8 +237,11 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
             return Json(claimRecord);
         }
 
-        //============================================//
-        // Returns a specific file to be downloaded
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Returns a specific file to be downloaded
+        /// </summary>
         [HttpGet]
         public async Task<FileContentResult> DownloadDocument(int documentID)
         {
@@ -224,8 +251,11 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
             return File(decryptedContent, document.ContentType, document.Title);
         }
 
-        //=================================================//
-        // deletes a claim if it is still pending approval
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// deletes a claim, only if it is still pending approval
+        /// </summary>
         public async Task<IActionResult> DeleteClaim(int claimID)
         {
             try
@@ -255,15 +285,18 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 TempData["ToastData"] = JsonConvert.SerializeObject(new ToastPartialData { ToastType = false, ToastMessage = $"No claim found matching claim ID: {claimID}." });
                 return RedirectToAction(nameof(Index));
             }
         }
 
-        //=============================================//
-        // Performs automated approval checks
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Performs automated approval checks
+        /// </summary>
         private async Task<(bool, string)> PassesAutomatedApproval(CreateClaimViewModel claim)
         {
             try
@@ -277,7 +310,7 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
                 // claimed hours (month total) must not exceed scheduled sessions + 20%
                 var date = DateOnly.FromDateTime(DateTime.Now);
                 (double, int) hoursClaimedAndSessions = await _repository.GetMonthHoursClaimedAndSessions(claim.CourseModuleID, date);
-                if ((hoursClaimedAndSessions.Item1 + claim.HoursWorked) > 
+                if ((hoursClaimedAndSessions.Item1 + claim.HoursWorked) >
                     ((double)hoursClaimedAndSessions.Item2 + ((double)hoursClaimedAndSessions.Item2 * 0.2)))
                 {
                     return (false, "Automation Flagged: Claimed hours exceeded scheduled sessions for this month + 20%.");
@@ -290,11 +323,11 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
 
                 return (true, "Automation Passed: Claim approved automatically");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (false, "Automation Flagged: System error during automated checks.");
             }
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

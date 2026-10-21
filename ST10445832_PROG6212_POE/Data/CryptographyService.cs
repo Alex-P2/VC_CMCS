@@ -7,8 +7,11 @@ namespace ST10445832_PROG6212_POE.Data
     {
         private static readonly byte[] _key = Convert.FromHexString("f7b9a3c4d2e1f5067890abcd1234567890fedcba0987654321abcdef01234567");
 
-        //====================================================//
-        // returns encrypted byte array and random IV
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// returns encrypted byte array and random IV
+        /// </summary>
         public static FileEncryptionResponse EncryptFile(byte[] fileContent)
         {
             using (Aes aes = Aes.Create())
@@ -34,8 +37,11 @@ namespace ST10445832_PROG6212_POE.Data
             }
         }
 
-        //=====================================================//
-        // return decrypted byte array
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// return decrypted byte array
+        /// </summary>
         public static byte[] DecryptFile(byte[] encryptedFileContent, byte[] IV)
         {
             using (Aes aes = Aes.Create())
@@ -60,4 +66,4 @@ namespace ST10445832_PROG6212_POE.Data
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

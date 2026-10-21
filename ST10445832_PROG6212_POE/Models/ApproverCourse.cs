@@ -11,13 +11,13 @@ namespace ST10445832_PROG6212_POE.Models
         [Required]
         public int CourseID { get; set; }
         [Required]
-        public string ApproverID { get; set; }
+        public string ApproverID { get; set; } = string.Empty;
 
         [ForeignKey("CourseID")]
-        public Course Course { get; set; }
+        public Course Course { get; set; } = new();
 
         [ForeignKey("ApproverID")]
-        public ApplicationUser Approver { get; set; }
+        public ApplicationUser Approver { get; set; } = new();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

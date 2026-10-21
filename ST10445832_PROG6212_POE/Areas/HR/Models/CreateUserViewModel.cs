@@ -6,22 +6,22 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Models
     {
         [Required]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Letters only")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Letters only")]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         [RegularExpression(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[!@#$%^&*])(?=.*?[0-9]).{8,}$", ErrorMessage = "Must be more than 8 characters and contain at least 1 uppercase letter, 1 lower case letter, 1 symbol, 1 number")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required]
-        public string Role { get; set; }
+        public string Role { get; set; } = string.Empty;
 
         [Required]
         public int HourlyRate { get; set; } = 0; // lecturer only
@@ -43,4 +43,4 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Models
         public string? CoursesJson { get; set; } = string.Empty; // serialised courses data
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

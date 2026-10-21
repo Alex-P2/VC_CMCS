@@ -11,34 +11,45 @@ namespace ST10445832_PROG6212_POE.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ClaimID { get; set; }
+
         [Required]
-        public string LecturerID { get; set; }
+        public string LecturerID { get; set; } = string.Empty;
+
         [Required]
         public int LecturerModuleID { get; set; }
+
         [Required]
         public double HoursWorked { get; set; }
+
         [Required]
         public int HourlyRate { get; set; }
+
         [Required]
         public int StatusID { get; set; }
+
         public string AdditionalNotes { get; set; } = string.Empty;
+
         public int? InvoiceID { get; set; }
+
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;
 
+
         [ForeignKey(nameof(LecturerID))]
-        public ApplicationUser Lecturer { get; set; }
+        public ApplicationUser Lecturer { get; set; } = new();
+
 
         [ForeignKey(nameof(StatusID))]
-        public ClaimStatus Status { get; set; }
+        public ClaimStatus Status { get; set; } = new();
+
 
         [ForeignKey(nameof(InvoiceID))]
-        public Invoice Invoice { get; set; }
+        public Invoice Invoice { get; set; } = new();
 
         [ForeignKey(nameof(LecturerModuleID))]
-        public LecturerModule LecturerModule { get; set; }
+        public LecturerModule LecturerModule { get; set; } = new();
 
         public ICollection<SupportingDocument> SupportingDocuments { get; set; } = new List<SupportingDocument>();
         public ICollection<ClaimApproval> ClaimApprovals { get; set; } = new List<ClaimApproval>();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

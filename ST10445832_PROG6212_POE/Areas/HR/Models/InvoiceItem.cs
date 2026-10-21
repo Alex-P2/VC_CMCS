@@ -2,11 +2,11 @@
 {
     public class InvoiceItem
     {
-        public string CourseCode { get; set; }
-        public string ModuleCode { get; set; }
+        public string CourseCode { get; set; } = string.Empty;
+        public string ModuleCode { get; set; } = string.Empty;
         public int HourlyRate { get; set; }
         public double HoursWorked { get; set; }
         public double Total { get; set; }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

@@ -5,9 +5,9 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Models
     public class ClaimInvoiceDetail
     {
         public int InvoiceNumber { get; set; }
-        public string InvoiceeName { get; set; }
-        public string InvoiceeEmail { get; set; }
-        public BankAccount BankAccount { get; set; }
+        public string InvoiceeName { get; set; } = string.Empty;
+        public string InvoiceeEmail { get; set; } = string.Empty;
+        public BankAccount BankAccount { get; set; } = new();
         public List<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
         public double TotalAmount { get; set; }
 
@@ -19,4 +19,4 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Models
 
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

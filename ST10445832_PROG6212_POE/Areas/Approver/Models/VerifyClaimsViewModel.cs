@@ -2,9 +2,10 @@
 {
     public class VerifyClaimsViewModel
     {
-        public string Filter { get; set; }
+        public string Filter { get; set; } = string.Empty;
         public bool Filtered { get; set; }
-        public string Query { get; set; }
-        public List<VerifyClaimRecord> Claims { get; set; }
+        public string Query { get; set; } = string.Empty;
+        public List<VerifyClaimRecord> Claims { get; set; } = [];
     }
 }
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

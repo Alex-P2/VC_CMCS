@@ -12,22 +12,40 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
     [Authorize(Roles = "HR")]
     public class ReportsController : Controller
     {
+        /// <summary>
+        /// Database context
+        /// </summary>
         private readonly AppDbContext _dbContext;
+
+        /// <summary>
+        /// Identity user manager
+        /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ReportsController(AppDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
         }
 
+
+        //=============================================================================================================================//
         public async Task<IActionResult> Index()
         {
-            
-
-            return View();                            
+            return View();
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates a system statistics report in PDF format
+        /// </summary>
+        /// <param name="timeframe">Time period the report should cover</param>
         public async Task<IActionResult> GenerateStatisticsReport(int? timeframe = null)
         {
             var reportData = new ReportData(_dbContext, _userManager);
@@ -41,4 +59,4 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

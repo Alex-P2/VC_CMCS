@@ -197,10 +197,9 @@
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", () => {
         var filters = document.querySelectorAll('.claim-filter-option');
-        for (let i=0; i < filters.length; i++) {
+        for (let i = 0; i < filters.length; i++) {
             filters[i].addEventListener('click', () => {
-                if (!filters[i].classList.contains('active-filter'))
-                {
+                if (!filters[i].classList.contains('active-filter')) {
                     var prev = document.querySelector('.claim-filter-option.active-filter');
                     prev.classList.remove('active-filter');
                     filters[i].classList.add('active-filter')
@@ -211,8 +210,7 @@
         const detailModal = document.getElementById('detailModal')
 
         var detailBtns = document.querySelectorAll('details-btn');
-        for (var i = 0; i < detailBtns.length; i++)
-        {
+        for (var i = 0; i < detailBtns.length; i++) {
             detailModal.addEventListener('shown.bs.modal', () => {
                 detailsBtns[i].focus()
             })
@@ -240,7 +238,7 @@
             type: "POST",
             url: "/Lecturer/Claim/GetClaimDetail",
             data: { claimID: targetClaimID },
-            success: function (response){
+            success: function (response) {
                 claimSpan.innerHTML = response['claimID'];
                 claimantSpan.innerHTML = response["claimantName"];
                 moduleSpan.innerHTML = response['moduleCode'];
@@ -269,10 +267,10 @@
                 }
                 
             },
-            failure: function (response){
+            failure: function (response) {
                 console.log(response.content);
             },
-            error: function (response){
+            error: function (response) {
                 console.log(response.content);
             }
         });
@@ -296,34 +294,28 @@
 
     conn.on('ClaimStatusUpdated', (claimID, statusTitle) => {
         const claimRow = document.querySelector(`[data-claim-id="${claimID}"]`);
-        if (claimRow)
-        {
+        if (claimRow) {
             const statusSpan = claimRow.querySelector('.status-span');
-            if (statusSpan)
-            {
+            if (statusSpan) {
                 statusSpan.innerText = statusTitle;
 
-                if (statusTitle === "Approved")
-                {
+                if (statusTitle === "Approved") {
                     statusSpan.classList.remove('verified-status');
                     statusSpan.classList.remove('rejected-status');
                     statusSpan.classList.add('approved-status');
                 }
-                else if (statusTitle === "Verified")
-                {
+                else if (statusTitle === "Verified") {
                     statusSpan.classList.remove('pending-status');
                     statusSpan.classList.remove('approved-status');
                     statusSpan.classList.remove('rejected-status');
                     statusSpan.classList.add('verified-status');
                 }
-                else if (statusTitle === "Pending")
-                {
+                else if (statusTitle === "Pending") {
                     statusSpan.classList.remove('verified-status');
                     statusSpan.classList.remove('rejected-status');
                     statusSpan.classList.add('pending-status');
                 }
-                else if (statusTitle === "Rejected")
-                {
+                else if (statusTitle === "Rejected") {
                     statusSpan.classList.remove('verified-status');
                     statusSpan.classList.remove('pending-status');
                     statusSpan.classList.remove('approved-status');
@@ -334,5 +326,5 @@
     });
 
     conn.start()
-    .catch(error => console.log(error));
+        .catch(error => console.log(error));
 </script>

@@ -13,7 +13,7 @@ namespace ST10445832_PROG6212_POE.Models
         public int ClaimID { get; set; }
 
         [Required]
-        public string ApproverID { get; set; }
+        public string ApproverID { get; set; } = string.Empty;
 
         public DateTimeOffset DateApproved { get; set; } = DateTimeOffset.Now;
 
@@ -21,7 +21,7 @@ namespace ST10445832_PROG6212_POE.Models
         public Claim Claim { get; set; }
 
         [ForeignKey("ApproverID")]
-        public ApplicationUser Approver { get; set; }
+        public ApplicationUser Approver { get; set; } = new();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

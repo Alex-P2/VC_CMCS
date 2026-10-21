@@ -2,9 +2,9 @@
 {
     public class ClaimHistoryViewModel
     {
-        public List<ClaimHistoryRecord> Claims { get; set; }
-        public string Query { get; set; }
+        public List<ClaimHistoryRecord> Claims { get; set; } = [];
+        public string Query { get; set; } = string.Empty;
         public bool Filtered { get; set; }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

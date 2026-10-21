@@ -2,7 +2,6 @@
 // https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.frombodyattribute?view=aspnetcore-9.0
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -11,7 +10,6 @@ using ST10445832_PROG6212_POE.Areas.HR.Data;
 using ST10445832_PROG6212_POE.Areas.HR.Models;
 using ST10445832_PROG6212_POE.Data;
 using ST10445832_PROG6212_POE.Models;
-using System.Threading.Tasks;
 
 namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
 {
@@ -19,18 +17,34 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
     [Authorize(Roles = "HR")]
     public class InvoiceController : Controller
     {
+        /// <summary>
+        /// Database context
+        /// </summary>
         private readonly AppDbContext _dbContext;
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public InvoiceController(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
+
+        //=============================================================================================================================//
         public IActionResult Index()
         {
             return View();
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Displays filtered (optional) approved claims which have yet to be invoiced
+        /// </summary>
+        /// <param name="query">Search query from claim filter</param>
         public async Task<IActionResult> ProcessClaims(string query)
         {
             var claimsDetail = await _dbContext.Claims.Where(claim => claim.Status.StatusTitle.Equals("Approved") && claim.InvoiceID == null)
@@ -64,6 +78,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             return View(viewModel);
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Displays invoices for claims
+        /// </summary>
         public async Task<IActionResult> Invoices()
         {
             var invoicesWithDetail = await _dbContext.Invoices
@@ -85,8 +104,12 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             return View(viewModel);
         }
 
-        //=================================================================//
-        // Sets the status of a specified claim to rejected
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Sets the status of a specified claim to rejected
+        /// </summary>
+        /// <param name="claimID">ID of claim to be rejected</param>
         public async Task<IActionResult> RejectClaim(string claimID)
         {
             var claim = await _dbContext.Claims.FindAsync(int.Parse(claimID));
@@ -108,8 +131,12 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             return RedirectToAction("ProcessClaims");
         }
 
-        //===============================================================//
-        // Generates an invoice for one or more lecturer claims
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Generates an invoice for one or more lecturer claims
+        /// </summary>
+        /// <param name="ClaimIDs">ID of the claim being invoiced</param>
         [HttpPost]
         [Route("HR/Invoice/GenerateInvoice")]
         public async Task<JsonResult> GenerateInvoice([FromBody] List<int> ClaimIDs) // (Microsoft docs)
@@ -132,7 +159,7 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
                     invoiceDetail.InvoiceNumber = 1;
                 }
                 else
-                {   
+                {
                     invoiceDetail.InvoiceNumber = invoices.Last().InvoiceID + 1;
                 }
 
@@ -153,7 +180,7 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
                 }
 
                 invoiceDetail.InvoiceeName = $"{claimant.FirstName} {claimant.LastName}";
-                invoiceDetail.InvoiceeEmail = claimant.Email;
+                invoiceDetail.InvoiceeEmail = claimant.Email ?? string.Empty;
                 invoiceDetail.BankAccount = claimant.BankAccount;
                 invoiceDetail.TotalAmount = claims.Select(claim => claim.HourlyRate * claim.HoursWorked).Sum();
 
@@ -202,13 +229,20 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
                 TempData["ToastData"] = JsonConvert.SerializeObject(new ToastPartialData { ToastMessage = "Invoice generated!", ToastType = true });
                 return new JsonResult(new { redirectUrl = Url.Action("ProcessClaims") });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TempData["ToastData"] = JsonConvert.SerializeObject(new ToastPartialData { ToastMessage = "Failed to process claim.", ToastType = false });
                 return new JsonResult(new { redirectUrl = Url.Action("ProcessClaims") });
             }
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Downloads or opens an invoice as PDF
+        /// </summary>
+        /// <param name="InvoiceID">ID of the invoice to download or view</param>
+        /// <param name="TableAction"></param>
         public async Task<IActionResult> DownloadInvoice(int InvoiceID, string TableAction)
         {
             try
@@ -236,7 +270,7 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
                 return RedirectToAction("Invoices");
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TempData["ToastData"] = JsonConvert.SerializeObject(new ToastPartialData { ToastMessage = "Failed to fetch invoice.", ToastType = false });
                 return RedirectToAction("Invoices");
@@ -244,4 +278,4 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

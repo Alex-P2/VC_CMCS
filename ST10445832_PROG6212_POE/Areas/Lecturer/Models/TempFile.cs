@@ -2,9 +2,9 @@
 {
     public class TempFile
     {
-        public string FileName { get; set; }
-        public string Path { get; set; }
-        public string ContentType { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+        public string ContentType { get; set; } = string.Empty;
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

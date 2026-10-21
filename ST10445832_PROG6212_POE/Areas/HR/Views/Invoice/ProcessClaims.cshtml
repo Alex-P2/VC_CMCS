@@ -11,7 +11,6 @@
     await Html.RenderPartialAsync("_LoginPartial");
 }
 
-@using Newtonsoft.Json;
 @model ProcessClaimsViewModel
 
 <div class="container justify-content-center">
@@ -130,8 +129,7 @@
         var claimSelectionLecturerID = null;
         var claimSelection = [];
 
-        function selectClaim(claimID)
-        {
+        function selectClaim(claimID) {
             const claimRow = document.getElementById(`claim-id-${claimID}`);
             const rowLecturerID = claimRow.getAttribute('data-lecturer-id');
             if (claimSelectionLecturerID == null) {
@@ -148,8 +146,7 @@
             claimSelection.push(claimID);
         }
 
-        function deselectClaim(claimID)
-        {
+        function deselectClaim(claimID) {
             const claimRow = document.getElementById(`claim-id-${claimID}`);
             // remove background to indicate deselection
             claimRow.removeAttribute('style');
@@ -164,8 +161,7 @@
             }
         }
 
-        function submitClaims(claimID)
-        {
+        function submitClaims(claimID) {
             if (claimSelection.length == 0) {
                 claimSelection.push(claimID);
             }
@@ -177,13 +173,12 @@
                 },
                 body: JSON.stringify(claimSelection)
             })
-            .then(res => res.json())
-            .then(result => {
-                if (result.redirectUrl)
-                {
-                    window.location.href = result.redirectUrl;
-                }
-            });
+                .then(res => res.json())
+                .then(result => {
+                    if (result.redirectUrl) {
+                        window.location.href = result.redirectUrl;
+                    }
+                });
         }
     </script>
 }

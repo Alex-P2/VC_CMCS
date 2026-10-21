@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ST10445832_PROG6212_POE.Areas.HR.Models;
-using ST10445832_PROG6212_POE.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +8,7 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Models
     public class CreateClaimViewModel
     {
         [Required]
-        public string LecturerID { get; set; }
+        public string LecturerID { get; set; } = string.Empty;
 
         public string LecturerName { get; set; } = string.Empty;
 
@@ -17,7 +16,7 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Models
         [DisplayName("Module")]
         public int CourseModuleID { get; set; }
 
-        [Required (ErrorMessage = "Hours worked is required, and must be a valid number.")]
+        [Required(ErrorMessage = "Hours worked is required, and must be a valid number.")]
         [DisplayName("Hours Worked")]
         public double HoursWorked { get; set; }
 
@@ -35,4 +34,4 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Models
         public List<TempFile> TempFiles { get; set; } = new List<TempFile>();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

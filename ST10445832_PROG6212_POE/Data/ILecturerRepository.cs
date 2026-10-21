@@ -9,9 +9,10 @@ namespace ST10445832_PROG6212_POE.Data
 {
     public class ClaimWithStatus
     {
-        public Claim Claim { get; set; }
-        public ClaimStatus ClaimStatus { get; set; }
+        public Claim Claim { get; set; } = new();
+        public ClaimStatus ClaimStatus { get; set; } = new();
     }
+
     public interface ILecturerRepository
     {
         Task<List<CourseModuleWithCodes>> GetLecturerModulesAsync(string lecturerID);
@@ -46,4 +47,4 @@ namespace ST10445832_PROG6212_POE.Data
 
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

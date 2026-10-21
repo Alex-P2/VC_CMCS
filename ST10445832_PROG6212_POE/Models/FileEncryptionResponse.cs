@@ -2,8 +2,8 @@
 {
     public class FileEncryptionResponse
     {
-        public byte[] Content { get; set; }
-        public byte[] IV { get; set; }
+        public byte[] Content { get; set; } = [];
+        public byte[] IV { get; set; } = [];
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

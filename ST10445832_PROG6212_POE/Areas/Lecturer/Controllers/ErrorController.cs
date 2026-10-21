@@ -6,9 +6,11 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
 {
     public class ErrorController : Controller
     {
-        public ErrorController()
-        {
-        }
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ErrorController() { }
 
         [Route("Error/{statusCode}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -18,3 +20,4 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
         }
     }
 }
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

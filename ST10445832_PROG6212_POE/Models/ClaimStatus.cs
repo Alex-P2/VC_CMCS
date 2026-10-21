@@ -8,12 +8,14 @@ namespace ST10445832_PROG6212_POE.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int StatusID { get; set; }
+
         [Required]
-        public string StatusTitle { get; set; }
+        public string StatusTitle { get; set; } = string.Empty;
+
         [Required]
-        public string StatusMessage { get; set; }
+        public string StatusMessage { get; set; } = string.Empty;
 
         public ICollection<Claim> Claims { get; set; } = new List<Claim>();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

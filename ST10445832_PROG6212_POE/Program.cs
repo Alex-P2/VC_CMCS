@@ -92,7 +92,8 @@ using (var scope = app.Services.CreateScope())
     await dbContext.Database.MigrateAsync();
     await IdentitySeeder.SeedRolesAndUsers(services);
     await SampleDataSeeder.InitialiseSampleData(services);
-};
+}
+;
 
 app.MapControllerRoute(
     name: "areas",
@@ -105,4 +106,4 @@ app.MapControllerRoute(
 app.MapHub<StatusHub>("/StatusHub");
 
 app.Run();
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

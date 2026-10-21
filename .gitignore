@@ -53,3 +53,5 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /packages
+/.vs
+settings.VisualStudio.json

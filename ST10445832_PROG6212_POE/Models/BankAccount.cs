@@ -8,19 +8,24 @@ namespace ST10445832_PROG6212_POE.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BankAccountID { get; set; }
+
         [Required]
-        public string LecturerID { get; set; }
+        public string LecturerID { get; set; } = string.Empty;
+
         [Required]
-        public string BankName { get; set; }
+        public string BankName { get; set; } = string.Empty;
+
         [Required]
-        public string BranchCode { get; set; }
+        public string BranchCode { get; set; } = string.Empty;
+
         [Required]
-        public string AccountNumber { get; set; }
+        public string AccountNumber { get; set; } = string.Empty;
+
         [Required]
-        public string AccountHolder { get; set; }
+        public string AccountHolder { get; set; } = string.Empty;
 
         [ForeignKey("LecturerID")]
-        public ApplicationUser Lecturer { get; set; }
+        public ApplicationUser Lecturer { get; set; } = new();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

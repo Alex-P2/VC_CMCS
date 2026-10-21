@@ -1,26 +1,40 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using ST10445832_PROG6212_POE.Data;
 using ST10445832_PROG6212_POE.Models;
-using System.Threading.Tasks;
 
 namespace ST10445832_PROG6212_POE.Areas.HR.Data
 {
     public class ReportData
     {
+        /// <summary>
+        /// Database context
+        /// </summary>
         private readonly AppDbContext _dbContext;
+
+        /// <summary>
+        /// Identity user manager
+        /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ReportData(AppDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
         }
 
-        //==========================================================================//
-        // Returns lecturer statistics
-        // Timeframe (months) is optional
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Returns lecturer statistics
+        /// Timeframe (months) is optional
+        /// </summary>
+        /// <param name="timeframe">Number of months to report on</param>
         public async Task<LecturerStatistics> LecturerStatisticsData(int? timeframe = null)
         {
             var lecturers = await _userManager.GetUsersInRoleAsync("Lecturer");
@@ -68,6 +82,12 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
             };
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Returns statistics for approvers
+        /// </summary>
+        /// <param name="timeframe">Number of months to report on</param>
         public async Task<ApproverStatistics> ApproverStatisticsData(int? timeframe = null)
         {
             var claimsApprovalsQueryable = _dbContext.ClaimApprovals.AsQueryable();
@@ -115,6 +135,12 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
             };
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Returns statistics for HR users
+        /// </summary>
+        /// <param name="timeframe">Number of months to report on</param>
         public async Task<HrStatistics> HrStatisticsData(int? timeframe = null)
         {
             var invoicesQueryable = _dbContext.Invoices.AsQueryable();
@@ -143,6 +169,10 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
         }
     }
 
+
+    /// <summary>
+    /// Lecturer statistics model
+    /// </summary>
     public class LecturerStatistics
     {
         public double AverageHourlyRate { get; set; }
@@ -152,6 +182,10 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
         public double TotalClaimValue { get; set; }
     }
 
+
+    /// <summary>
+    /// Approver statistics model
+    /// </summary>
     public class ApproverStatistics
     {
         public double AverageClaimsProcessed { get; set; }
@@ -159,10 +193,14 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
         public double AverageTimeToInvoice { get; set; }
     }
 
+
+    /// <summary>
+    /// HR statistics model
+    /// </summary>
     public class HrStatistics
     {
         public int TotalInvoicesCreated { get; set; }
         public double TotalInvoiceValue { get; set; }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

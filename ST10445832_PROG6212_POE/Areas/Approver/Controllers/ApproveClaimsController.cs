@@ -13,14 +13,33 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
     [Authorize(Roles = "Academic Manager")]
     public class ApproveClaimsController : Controller
     {
+        /// <summary>
+        /// Provides access to Approver role claim management methods
+        /// </summary>
         private readonly IApproverRepository _repository;
+
+        /// <summary>
+        /// SignalR status event listener
+        /// </summary>
         private readonly StatusListener _listener;
+
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ApproveClaimsController(IApproverRepository repository, StatusListener listener)
         {
             _repository = repository;
             _listener = listener;
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Loads filtered (optional) claims approved by the current user
+        /// </summary>
+        /// <param name="query">Search query for claim filter</param>
         public async Task<IActionResult> Index(string query)
         {
             // get verified claims and claims which were approved or rejected by the current user
@@ -55,8 +74,12 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
             return View(viewModel);
         }
 
-        //===================================================================//
-        // Returns a json object containing the full detail of a claim
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Returns a json object containing the full detail of a claim
+        /// </summary>
+        /// <param name="claimID">ID for claim to display</param>
         public async Task<JsonResult> GetClaimDetail(int claimID)
         {
             ApproveClaimsRecord claimRecord = await _repository.GetApproveClaimRecordAsync(claimID);
@@ -64,8 +87,12 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
             return Json(claimRecord);
         }
 
-        //============================================//
-        // Returns a specific file to be downloaded
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Returns a specific file to be downloaded
+        /// </summary> 
+        /// <param name="documentID">ID of document to download</param>
         [HttpGet]
         public async Task<FileContentResult> DownloadDocument(int documentID)
         {
@@ -75,8 +102,12 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
             return File(decryptedContent, document.ContentType, document.Title);
         }
 
-        //=============================================//
-        // Updated the status of a claim to approved
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Updates the status of a claim to approved
+        /// </summary>
+        /// <param name="claimID">ID of the claim to approve</param>
         [HttpGet]
         public async Task<IActionResult> ApproveClaim(int claimID)
         {
@@ -111,8 +142,12 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //=============================================//
-        // Updated the status of a claim to rejected
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Updates the status of a claim to rejected
+        /// </summary>
+        /// <param name="claimID">ID of claim to reject</param>
         [HttpGet]
         public async Task<IActionResult> RejectClaim(int claimID)
         {
@@ -141,4 +176,4 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

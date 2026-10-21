@@ -8,12 +8,14 @@ namespace ST10445832_PROG6212_POE.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ModuleID { get; set; }
+
         [Required]
-        public string ModuleCode { get; set; }
+        public string ModuleCode { get; set; } = string.Empty;
+
         [Required]
-        public string ModuleName { get; set; }
+        public string ModuleName { get; set; } = string.Empty;
 
         public ICollection<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

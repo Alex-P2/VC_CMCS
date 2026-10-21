@@ -8,16 +8,19 @@ namespace ST10445832_PROG6212_POE.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CourseID { get; set; }
+
         [Required]
-        public string CourseCode { get; set; }
+        public string CourseCode { get; set; } = string.Empty;
+
         [Required]
-        public string CourseName { get; set; }
+        public string CourseName { get; set; } = string.Empty;
+
         [Required]
-        public string QualificationType { get; set; }
+        public string QualificationType { get; set; } = string.Empty;
 
         public ICollection<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
         public ICollection<ApproverCourse> ApproverCourses { get; set; } = new List<ApproverCourse>();
 
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

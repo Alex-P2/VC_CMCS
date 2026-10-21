@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.SignalR;
 using Moq;
 using Newtonsoft.Json;
 using ST10445832_PROG6212_POE.Areas.Approver.Controllers;
+using ST10445832_PROG6212_POE.Areas.HR.Models;
 using ST10445832_PROG6212_POE.Areas.Lecturer.Controllers;
 using ST10445832_PROG6212_POE.Areas.Lecturer.Models;
 using ST10445832_PROG6212_POE.Data;
@@ -29,25 +30,25 @@ namespace ST10445832_PROG6212_POE.UnitTests
         {
             // Arrange
             // Copilot generated test data
-            var modules = new List<Module>
+            var modules = new List<CourseModuleWithCodes>
             {
-                new Module
+                new CourseModuleWithCodes
                 {
-                    ModuleID = 1,
+                    CourseModuleId = 1,
+                    ModuleId = 1,
                     ModuleCode = "CS101",
-                    ModuleName = "Introduction to Computer Science",
                 },
-                new Module
+                new CourseModuleWithCodes
                 {
-                    ModuleID = 2,
+                    CourseModuleId = 2,
+                    ModuleId = 2,
                     ModuleCode = "CS102",
-                    ModuleName = "Data Structures A",
                 },
-                new Module
+                new CourseModuleWithCodes
                 {
-                    ModuleID = 3,
+                    CourseModuleId = 3,
+                    ModuleId = 3,
                     ModuleCode = "CS103",
-                    ModuleName = "Data Structures B",
                 },
             };
             // End Copilot
@@ -55,7 +56,7 @@ namespace ST10445832_PROG6212_POE.UnitTests
             var mockRepository = new Mock<ILecturerRepository>();
 
             mockRepository.Setup(repo => repo.GetLecturerModulesAsync("lecturer123"))
-                .Returns(Task.FromResult(new List<Module>
+                .Returns(Task.FromResult(new List<CourseModuleWithCodes>
                 {
                     modules[0],
                     modules[1]
@@ -72,7 +73,7 @@ namespace ST10445832_PROG6212_POE.UnitTests
             var result = await controller.Create() as ViewResult;
             var model = result.Model as CreateClaimViewModel;
 
-            var expectedModules = new List<Module> { modules[0], modules[1] };
+            var expectedModules = new List<CourseModuleWithCodes> { modules[0], modules[1] };
             var resultModules = model.Modules;
 
             // Assert
@@ -108,7 +109,7 @@ namespace ST10445832_PROG6212_POE.UnitTests
             CreateClaimViewModel viewModel = new CreateClaimViewModel
             {
                 LecturerID = "lecturer123",
-                ModuleID = 1,
+                CourseModuleID = 1,
                 HoursWorked = 10,
                 HourlyRate = 50,
                 AdditionalNotes = "Test claim",
@@ -188,7 +189,7 @@ namespace ST10445832_PROG6212_POE.UnitTests
             CreateClaimViewModel viewModel = new CreateClaimViewModel
             {
                 LecturerID = "lecturer123",
-                ModuleID = 0,
+                CourseModuleID = 0,
                 HoursWorked = -1,
                 HourlyRate = -1,
                 AdditionalNotes = "Test claim",
@@ -298,7 +299,7 @@ namespace ST10445832_PROG6212_POE.UnitTests
             var controller = new VerifyClaimsController(mockRepository.Object, statusListener);
             controller.ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext { User = mockUser } };
             controller.TempData = new TempDataDictionary(controller.HttpContext, Mock.Of<ITempDataProvider>()); // Copilot autocomplete
-            
+
             // Act
 
             await controller.VerifyClaim(1);
@@ -372,7 +373,6 @@ namespace ST10445832_PROG6212_POE.UnitTests
             controller.TempData = new TempDataDictionary(controller.HttpContext, Mock.Of<ITempDataProvider>()); // Copilot autocomplete
 
             // Act
-
             await controller.ApproveClaim(1);
             var toastStringOne = controller.TempData["ToastData"] as string;
             ToastPartialData toastDataOne = JsonConvert.DeserializeObject<ToastPartialData>(toastStringOne);
@@ -469,4 +469,4 @@ namespace ST10445832_PROG6212_POE.UnitTests
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

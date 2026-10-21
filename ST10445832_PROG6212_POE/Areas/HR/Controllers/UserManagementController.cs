@@ -16,17 +16,33 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
     [Authorize(Roles = "HR")]
     public class UserManagementController : Controller
     {
+        /// <summary>
+        /// Database context
+        /// </summary>
         private readonly AppDbContext _dbContext;
+
+        /// <summary>
+        /// Identity user manager
+        /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public UserManagementController(AppDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
         }
 
-        //==============================================================//
-        // Home view for user management
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Home view for user management
+        /// </summary>
+        /// <param name="query">Search query for user filter</param>
         public async Task<IActionResult> Index(string query)
         {
             // fetch users and their roles (excluding approver and admin role to avoid duplicate users)
@@ -75,8 +91,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             return View(viewModel);
         }
 
-        //==============================================================//
-        // Load view for creating a new user
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Load view for creating a new user
+        /// </summary>
         public async Task<IActionResult> Create()
         {
             var allModules = await _dbContext.Modules.Select(m => m.ModuleCode).ToListAsync();
@@ -105,12 +124,16 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             return View(viewModel);
         }
 
-        //=================================================================//
-        // Create a new user
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Create a new user
+        /// </summary>
+        /// <param name="model">Model for user creation view</param>
         [HttpPost]
-        public async Task<IActionResult> Create (CreateUserViewModel model)
+        public async Task<IActionResult> Create(CreateUserViewModel model)
         {
-            var courseModuleIds = JsonConvert.DeserializeObject<List<int>> (model.ModulesJson); // modules for lecturer
+            var courseModuleIds = JsonConvert.DeserializeObject<List<int>>(model.ModulesJson); // modules for lecturer
             var courseIds = JsonConvert.DeserializeObject<List<int>>(model.CoursesJson); // courses for approvers
 
             Console.WriteLine(JsonConvert.SerializeObject(model));
@@ -280,10 +303,14 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
         }
 
 
-        //==============================================================//
-        // Load view for updating a user
+        //=============================================================================================================================//
+        /// <summary>
+        /// Load view for updating a user
+        /// </summary>
+        /// <param name="userId">ID of user to update</param>
         public async Task<IActionResult> Update(string userId)
         {
+            // retrive user data
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
@@ -291,6 +318,7 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             }
             var userRoles = await _userManager.GetRolesAsync(user);
 
+            // populate view model
             var viewModel = new UpdateUserViewModel
             {
                 FirstName = user.FirstName,
@@ -299,6 +327,7 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
                 UserId = user.Id,
             };
 
+            // role-based view model population
             if (userRoles.Contains("Lecturer"))
             {
                 viewModel.Role = "Lecturer";
@@ -328,7 +357,7 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
                     .Join(_dbContext.Modules,
                         cm => cm.ModuleID,
                         m => m.ModuleID,
-                        (cm, m) => new { CourseModule=cm, Module=m })
+                        (cm, m) => new { CourseModule = cm, Module = m })
                     .Join(_dbContext.Courses,
                         cmm => cmm.CourseModule.CourseID,
                         c => c.CourseID,
@@ -365,8 +394,12 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             return View(viewModel);
         }
 
-        //==============================================================//
-        // update a user
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <param name="model">Update view model</param>
         [HttpPost]
         public async Task<IActionResult> Update(UpdateUserViewModel model)
         {
@@ -533,8 +566,12 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
             return RedirectToAction("Index");
         }
 
-        //==============================================================//
-        // Soft deletes a user (removes personal information and login)
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Soft deletes a user (removes personal information and login)
+        /// </summary>
+        /// <param name="UserId">ID of the user to delete</param>
         public async Task<IActionResult> Delete(string UserId)
         {
             var user = await _userManager.FindByIdAsync(UserId);
@@ -560,4 +597,4 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Controllers
 
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

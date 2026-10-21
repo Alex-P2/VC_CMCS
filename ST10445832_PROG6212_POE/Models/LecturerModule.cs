@@ -8,18 +8,20 @@ namespace ST10445832_PROG6212_POE.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LecturerModuleID { get; set; }
+
         [Required]
         public int CourseModuleID { get; set; }
+
         [Required]
-        public string LecturerID { get; set; }
+        public string LecturerID { get; set; } = string.Empty;
 
         [ForeignKey("CourseModuleID")]
-        public CourseModule CourseModule { get; set; }
+        public CourseModule CourseModule { get; set; } = new();
 
         [ForeignKey("LecturerID")]
-        public ApplicationUser Lecturer { get; set; }
+        public ApplicationUser Lecturer { get; set; } = new();
 
         public ICollection<Claim> Claims { get; set; } = new List<Claim>();
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

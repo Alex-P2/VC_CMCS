@@ -64,7 +64,7 @@
                                     <td>@claim.ClaimantName</td>
                                     <td>@claim.ModuleCode</td>
                                     <td>@claim.HoursWorked</td>
-                                    <td>R@(claim.HoursWorked* claim.HourlyRate)</td>
+                                    <td>R@(claim.HoursWorked * claim.HourlyRate)</td>
                                     @if (claim.Status.Equals("Approved"))
                                     {
                                         <td><span class="rounded-2 py-2 px-2 status-span approved-status">@claim.Status</span></td>
@@ -231,8 +231,7 @@
         const reject = document.getElementById('confirmReject')
 
         var detailBtns = document.querySelectorAll('details-btn');
-        for (var i = 0; i < detailBtns.length; i++)
-        {
+        for (var i = 0; i < detailBtns.length; i++) {
             detailModal.addEventListener('shown.bs.modal', () => {
                 detailsBtns[i].focus()
             })
@@ -260,7 +259,7 @@
             type: "POST",
             url: "/Approver/VerifyClaims/GetClaimDetail",
             data: { claimID: targetClaimID },
-            success: function (response){
+            success: function (response) {
                 claimSpan.innerHTML = response['claimID'];
                 claimantSpan.innerHTML = response["claimantName"];
                 moduleSpan.innerHTML = response['moduleCode'];
@@ -289,10 +288,10 @@
                 }
 
             },
-            failure: function (response){
+            failure: function (response) {
                 console.log(response.content);
             },
-            error: function (response){
+            error: function (response) {
                 console.log(response.content);
             }
         });
@@ -300,12 +299,10 @@
 
     $('.btn-approve').click((event) => {
         var targetClaimID;
-        if (event.target.tagName === 'I')
-        {
+        if (event.target.tagName === 'I') {
             targetClaimID = event.delegateTarget.getAttribute('data-claim-id');
         }
-        else
-        {
+        else {
             targetClaimID = event.target.getAttribute('data-claim-id');
         }
         const claimIdSpan = document.querySelector('#verify-claim-id-span');
@@ -317,12 +314,10 @@
 
     $('.btn-reject').click((event) => {
         var targetClaimID;
-        if (event.target.tagName === 'I')
-        {
+        if (event.target.tagName === 'I') {
             targetClaimID = event.delegateTarget.getAttribute('data-claim-id');
         }
-        else
-        {
+        else {
             targetClaimID = event.target.getAttribute('data-claim-id');
         }
         const claimIdSpan = document.querySelector('#reject-claim-id-span');
@@ -341,34 +336,28 @@
 
     conn.on('ClaimStatusUpdated', (claimID, statusTitle) => {
         const claimRow = document.querySelector(`[data-claim-id="${claimID}"]`);
-        if (claimRow)
-        {
+        if (claimRow) {
             const statusSpan = claimRow.querySelector('.status-span');
-            if (statusSpan)
-            {
+            if (statusSpan) {
                 statusSpan.innerText = statusTitle;
 
-                if (statusTitle === "Approved")
-                {
+                if (statusTitle === "Approved") {
                     statusSpan.classList.remove('verified-status');
                     statusSpan.classList.remove('rejected-status');
                     statusSpan.classList.add('approved-status');
                 }
-                else if (statusTitle === "Verified")
-                {
+                else if (statusTitle === "Verified") {
                     statusSpan.classList.remove('pending-status');
                     statusSpan.classList.remove('approved-status');
                     statusSpan.classList.remove('rejected-status');
                     statusSpan.classList.add('verified-status');
                 }
-                else if (statusTitle === "Pending")
-                {
+                else if (statusTitle === "Pending") {
                     statusSpan.classList.remove('verified-status');
                     statusSpan.classList.remove('rejected-status');
                     statusSpan.classList.add('pending-status');
                 }
-                else if (statusTitle === "Rejected")
-                {
+                else if (statusTitle === "Rejected") {
                     statusSpan.classList.remove('verified-status');
                     statusSpan.classList.remove('pending-status');
                     statusSpan.classList.remove('approved-status');
@@ -379,5 +368,5 @@
     });
 
     conn.start()
-    .catch(error => console.log(error));
+        .catch(error => console.log(error));
 </script>

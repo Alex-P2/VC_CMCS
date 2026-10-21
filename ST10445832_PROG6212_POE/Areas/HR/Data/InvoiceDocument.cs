@@ -10,15 +10,32 @@ using ST10445832_PROG6212_POE.Areas.HR.Models;
 
 namespace ST10445832_PROG6212_POE.Areas.HR.Data
 {
+    /// <summary>
+    /// Invoice generation class
+    /// </summary>
     public class InvoiceDocument : IDocument
     {
+        /// <summary>
+        /// Data to populate the invoice template with
+        /// </summary>
         public ClaimInvoiceDetail InvoiceDetail { get; }
 
-        public InvoiceDocument (ClaimInvoiceDetail invoiceDetail)
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="invoiceDetail">Invoice detail model containing invoice data</param>
+        public InvoiceDocument(ClaimInvoiceDetail invoiceDetail)
         {
             InvoiceDetail = invoiceDetail;
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates the invoice document
+        /// </summary>
         public void Compose(IDocumentContainer container)
         {
             container
@@ -28,11 +45,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
                     page.Margin(1, Unit.Centimetre);
                     page.Header()
                         .Background(Colors.BlueGrey.Lighten1)
-                        .Element(ComposeHeader);
+                        .Element(this.ComposeHeader);
 
                     page.Content()
                         .Background(Colors.White)
-                        .Element(ComposeContent);
+                        .Element(this.ComposeContent);
 
                     page.Footer()
                         .Height(50)
@@ -48,6 +65,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
                 });
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates the invoice header
+        /// </summary>
         private void ComposeHeader(IContainer container)
         {
             // title and dates
@@ -93,6 +115,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
             });
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates the invoice body
+        /// </summary>
         private void ComposeContent(IContainer container)
         {
             container.Column(column =>
@@ -162,6 +189,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
             });
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates the invoice line items
+        /// </summary>
         private void ComposeTable(IContainer container)
         {
             container.Table(table =>
@@ -252,4 +284,4 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

@@ -3,7 +3,7 @@
     public class ToastPartialData
     {
         public bool ToastType { get; set; }
-        public string ToastMessage { get; set; }
+        public string ToastMessage { get; set; } = string.Empty;
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

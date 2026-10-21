@@ -39,7 +39,7 @@ namespace ST10445832_PROG6212_POE.Data
                 FirstName = "John",
                 LastName = "Smith",
                 UserName = "JohnSmith",
-                Email="john@smith.co.za",
+                Email = "john@smith.co.za",
                 HourlyRate = 500
             };
 
@@ -121,4 +121,4 @@ namespace ST10445832_PROG6212_POE.Data
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

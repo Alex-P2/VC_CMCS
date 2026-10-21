@@ -11,7 +11,7 @@
     await Html.RenderPartialAsync("_LoginPartial");
 }
 
-@model UpdateUserViewModel;
+@model UpdateUserViewModel
 
 <div class="d-flex flex-column gap-1 position-relative justify-content-center align-items-center" style="width:100%;top:96px;">
     <form id="update-user-form" class="form-theme mb-4" asp-action="Update" method="post">
@@ -121,7 +121,7 @@
 </div>
 
 @section Scripts {
-@{
+    @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
@@ -134,12 +134,12 @@
             var addModule = true;
             for (let i = 0; i < moduleListDiv.children.length; i++) {
                 if (moduleListDiv.children[i].children[0].getAttribute('data-course-module-id') == moduleToAddId) {
-                addModule = false;
-                break;
+                    addModule = false;
+                    break;
+                }
             }
-        }
 
-            if (addModule && moduleToAddCode !='') {
+            if (addModule && moduleToAddCode != '') {
                 var newChild = document.createElement('div');
                 newChild.className = 'd-flex justify-content-between w-100 text-white';
                 newChild.innerHTML = `<span data-course-module-id="${moduleToAddId}">` + moduleToAddCode + '</span>' + `<a onclick="removeModule('${moduleToAddId}')" class="text-decoration-underline text-white" style="cursor:pointer;">remove</a>`;
@@ -155,12 +155,12 @@
             var addCourse = true;
             for (let i = 0; i < courseListDiv.children.length; i++) {
                 if (courseListDiv.children[i].children[0].getAttribute('data-course-id') == courseToAddId) {
-                addCourse = false;
-                break;
+                    addCourse = false;
+                    break;
+                }
             }
-        }
 
-            if (addCourse && courseToAddCode !='') {
+            if (addCourse && courseToAddCode != '') {
                 var newChild = document.createElement('div');
                 newChild.className = 'd-flex justify-content-between w-100 text-white';
                 newChild.innerHTML = `<span data-course-id="${courseToAddId}">` + courseToAddCode + '</span>' + `<a onclick="removeCourse('${courseToAddId}')" class="text-decoration-underline text-white" style="cursor:pointer;">remove</a>`;
@@ -172,7 +172,7 @@
         function removeModule(courseModuleId) {
             const moduleListDiv = document.getElementById('added-modules');
             for (let i = 0; i < moduleListDiv.children.length; i++) {
-                if (moduleListDiv.children[i].children[0].getAttribute('data-course-module-id') == courseModuleId)  {
+                if (moduleListDiv.children[i].children[0].getAttribute('data-course-module-id') == courseModuleId) {
                     moduleListDiv.removeChild(moduleListDiv.children[i]);
                     break;
                 }
@@ -181,10 +181,10 @@
 
         // remove a course from the list of selected courses
         function removeCourse(courseId) {
-           const courseListDiv = document.getElementById('added-courses');
+            const courseListDiv = document.getElementById('added-courses');
             for (let i = 0; i < courseListDiv.children.length; i++) {
                 if (courseListDiv.children[i].children[0].getAttribute('data-course-id') == courseId) {
-                     courseListDiv.removeChild(courseListDiv.children[i]);
+                    courseListDiv.removeChild(courseListDiv.children[i]);
                     break;
                 }
             }

@@ -10,15 +10,32 @@ namespace ST10445832_PROG6212_POE.Controllers
 {
     public class AccountController : Controller
     {
+        /// <summary>
+        /// Identity user signin manager
+        /// </summary>
         private readonly SignInManager<ApplicationUser> _signInManager;
+
+        /// <summary>
+        /// Identity user manager
+        /// </summary>
         private readonly UserManager<ApplicationUser> _userManager;
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// User signin view. Redirects to home if user is already authenticated
+        /// </summary>
         [AllowAnonymous]
         public IActionResult SignIn()
         {
@@ -41,6 +58,11 @@ namespace ST10445832_PROG6212_POE.Controllers
             return View();
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Handles user authentication
+        /// </summary>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> SignIn(SignInCredentials signInCredentials)
@@ -81,6 +103,12 @@ namespace ST10445832_PROG6212_POE.Controllers
             return View("SignIn", signInCredentials);
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Handles user sign-out
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SignOut()
         {
@@ -89,6 +117,11 @@ namespace ST10445832_PROG6212_POE.Controllers
         }
 
 
+        //=============================================================================================================================//
+        /// <summary>
+        /// Handles user's trying to access resources they aren't authorised to access
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         public IActionResult AccessDenied()
         {
@@ -96,4 +129,4 @@ namespace ST10445832_PROG6212_POE.Controllers
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

@@ -108,10 +108,9 @@
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", () => {
         var filters = document.querySelectorAll('.role-filter-option');
-        for (let i=0; i < filters.length; i++) {
+        for (let i = 0; i < filters.length; i++) {
             filters[i].addEventListener('click', () => {
-                if (!filters[i].classList.contains('active-filter'))
-                {
+                if (!filters[i].classList.contains('active-filter')) {
                     var prev = document.querySelector('.role-filter-option.active-filter');
                     prev.classList.remove('active-filter');
                     filters[i].classList.add('active-filter')

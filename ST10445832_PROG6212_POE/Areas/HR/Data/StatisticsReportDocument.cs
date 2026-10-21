@@ -9,11 +9,31 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
 {
     public class StatisticsReportDocument : IDocument
     {
+        /// <summary>
+        /// Lecturer usage data
+        /// </summary>
         public LecturerStatistics LecturerStats { get; }
+
+        /// <summary>
+        /// Approver usage data
+        /// </summary>
         public ApproverStatistics ApproverStats { get; }
+
+        /// <summary>
+        /// HR usage data
+        /// </summary>
         public HrStatistics HrStats { get; }
+
+        /// <summary>
+        /// Number of months the report covers
+        /// </summary>
         public int Timeframe { get; }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public StatisticsReportDocument(LecturerStatistics lecturerStats, ApproverStatistics approverStats,
             HrStatistics hrStats, int? timeframe = null)
         {
@@ -23,6 +43,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
             Timeframe = timeframe ?? 0;
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates a system usage statistics report
+        /// </summary>
         public void Compose(IDocumentContainer container)
         {
             container
@@ -32,11 +57,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
                     page.Margin(1, Unit.Centimetre);
                     page.Header()
                         .Background(Colors.BlueGrey.Lighten1)
-                        .Element(ComposeHeader);
+                        .Element(this.ComposeHeader);
 
                     page.Content()
                         .Background(Colors.White)
-                        .Element(ComposeContent);
+                        .Element(this.ComposeContent);
 
                     page.Footer()
                         .Height(50)
@@ -52,6 +77,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
                 });
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates the report header
+        /// </summary>
         private void ComposeHeader(IContainer container)
         {
             container.Row(row =>
@@ -101,6 +131,11 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
             });
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// Creates the report body
+        /// </summary>
         private void ComposeContent(IContainer container)
         {
             container.Column(column =>
@@ -131,7 +166,7 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
                             .Text($"Total Claim Value: {LecturerStats.TotalClaimValue.ToString("C")}");
                     });
 
-                    
+
                 });
 
                 column.Item().Row(row =>
@@ -181,4 +216,4 @@ namespace ST10445832_PROG6212_POE.Areas.HR.Data
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

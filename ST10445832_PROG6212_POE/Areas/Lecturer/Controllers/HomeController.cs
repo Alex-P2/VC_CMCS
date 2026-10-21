@@ -18,9 +18,12 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
             return View();
         }
 
-        //======================================================//
-        // simple redirect action to handle toasts on the index
-        // view after creating a claim
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// simple redirect action to handle toasts on the index
+        /// view after creating a claim
+        /// </summary>
         public IActionResult ClaimCreated(bool success, string toastMessage)
         {
             if (success)
@@ -34,17 +37,30 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
             return RedirectToAction("Index");
         }
 
+        //=============================================================================================================================//
+        /// <summary>
+        /// User account view
+        /// </summary>
         public IActionResult MyAccount()
         {
             return View();
         }
 
+
+        //=============================================================================================================================//
+        /// <summary>
+        /// User account edit view
+        /// </summary>
         [HttpPost]
         public IActionResult UpdateAccount()
         {
             return RedirectToAction("Index");
         }
 
+        //=============================================================================================================================//
+        /// <summary>
+        /// Error view
+        /// </summary>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -52,4 +68,4 @@ namespace ST10445832_PROG6212_POE.Areas.Lecturer.Controllers
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

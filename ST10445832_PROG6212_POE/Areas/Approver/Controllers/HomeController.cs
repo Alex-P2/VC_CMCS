@@ -12,6 +12,10 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
     [Authorize(Roles = "Approver")]
     public class HomeController : Controller
     {
+        //=============================================================================================================================//
+        /// <summary>
+        /// Handles role-based home view display
+        /// </summary>
         public IActionResult Index()
         {
             // redirect based on sub-role
@@ -26,6 +30,7 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
             return View();
         }
 
+
         public IActionResult MyAccount()
         {
             return View();
@@ -38,4 +43,4 @@ namespace ST10445832_PROG6212_POE.Areas.Approver.Controllers
         }
     }
 }
-//////////////////////////////////// END OF FILE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////////////////////END OF FILE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
