@@ -1,4 +1,6 @@
-# Contract Monthly Claims System (CMCS)
+# Varsity College Contractor Monthly Claim System
+##### POE SUBMISSION FOR BCAD YEAR 2 MODULE PROG6212
+
 This system has been designed for internal use at Varsity College. <br>
 The CMCS allows contract lecturers to make claims for work done. Programme coordinators and academic managers can review, approve, or reject claims made by lecturers based on the information provided in the claim.
 ## MVC GUI Prototype (Part 1)
