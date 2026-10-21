@@ -125,11 +125,11 @@ Users can also be found in Data/IdentitySeeder.cs<br>
 </ol>
 
 ### Documentation
-[Project Report](https://github.com/VCCT-PROG6212-2025-G1/ST10445832_PROG6212_POE/blob/main/Documentation/ST10445832_PROG6212_POE_Part1.pdf) <br>
-[Figma GUI](https://github.com/VCCT-PROG6212-2025-G1/ST10445832_PROG6212_POE/tree/main/Documentation) <br>
-[Project Plan](https://github.com/VCCT-PROG6212-2025-G1/ST10445832_PROG6212_POE/tree/main/Documentation/Project%20Plan)<br>
-[Database UML Class Diagram](https://github.com/VCCT-PROG6212-2025-G1/ST10445832_PROG6212_POE/tree/main/Documentation/UML%20Class%20Diagram%20(Database))<br>
-[Powerpoint Presentation]()<br>
+[Project Report](https://github.com/Alex-P2/VC_CMCS/blob/main/Documentation/ST10445832_PROG6212_POE_Part1.pdf) <br>
+[Figma GUI](https://github.com/Alex-P2/VC_CMCS/blob/main/Documentation/Figma%20GUI%20Design/ST10445832%20Contract%20Monthly%20Claim%20System%20Figma.pdf) <br>
+[Project Plan](https://github.com/Alex-P2/VC_CMCS/blob/main/Documentation/Project%20Plan/ST10445832%20Project%20Plan%20-%20Gantt.pdf)<br>
+[Database UML Class Diagram](https://github.com/Alex-P2/VC_CMCS/blob/main/Documentation/UML%20Class%20Diagram%20(Database)/ST10445832_PROG6212_POEv3.png)<br>
+[Presentation](https://github.com/Alex-P2/VC_CMCS/blob/main/Documentation/Powerpoint%20Presentation%20(Part%203)/ST01445832%20PROG6212%20CMCS%20Presentation.pdf)<br>
 [YouTube Demo (Part 1)](https://youtu.be/wDHF1rNLXaI)<br>
 [YouTube Demo (Part 2)](https://youtu.be/06Uq9BbWDi0)<br>
 [YouTube Demo (Part 3)](https://www.youtube.com/watch?v=hT48b6yZzzk)<br>
